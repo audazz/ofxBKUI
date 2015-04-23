@@ -12,6 +12,7 @@ void ofxBKUIComponent::init(float _x, float _y, float _width,float _height)
 	enabled = true;
 	isOver = false;
 	isPressed = false;
+	mouseEnabled = true;
 
 	drawDebug = false;  
 
@@ -39,17 +40,14 @@ void ofxBKUIComponent::draw()
 
 	if(drawDebug || ofxBKUI::drawDebug)
 	{
+		printf("Draw debug");
 		ofPushStyle();
 		ofSetColor(ofColor::red,100);
 		ofLine(-10,0,10,0);
 		ofLine(0,-10,0,10);
 		ofSetColor(ofColor::purple,100);
 		ofNoFill();
-
-		/*
 		ofRect(0,0,width,height);
-		ofLine(-position.x,-position.y,0,0);
-		*/
 		
 		ofPopStyle();
 	}
@@ -70,7 +68,7 @@ void ofxBKUIComponent::drawHandler(ofEventArgs& eventArgs)
 		ofPopStyle();
 	ofPopMatrix();
 
-	if(enabled)
+	if(enabled && mouseEnabled)
 	{
 		bool mouseInside = isMouseInside();
 		if(mouseInside && !isOver) mouseOver();
@@ -82,7 +80,7 @@ void ofxBKUIComponent::drawHandler(ofEventArgs& eventArgs)
 
 void ofxBKUIComponent::mousePressedHandler(ofMouseEventArgs& eventArgs)
 {
-	if(!enabled || !visible) return;
+	if(!enabled || !visible || !mouseEnabled) return;
 
 	if(isMouseInside()) 
 	{
@@ -98,7 +96,7 @@ void ofxBKUIComponent::mousePressedHandler(ofMouseEventArgs& eventArgs)
 
 void ofxBKUIComponent::mouseReleasedHandler(ofMouseEventArgs& eventArgs)
 {
-	if(!enabled || !visible) return;
+	if(!enabled || !visible || !mouseEnabled) return;
 
 	
 	if(isMouseInside()) mouseReleased(eventArgs);
@@ -109,7 +107,7 @@ void ofxBKUIComponent::mouseReleasedHandler(ofMouseEventArgs& eventArgs)
 
 void ofxBKUIComponent::mouseDraggedHandler(ofMouseEventArgs& eventArgs)
 {
-	if(!enabled || !visible) return;
+	if(!enabled || !visible || !mouseEnabled) return;
 
 	ofVec2f newDelta = getMousePosition()-initMousePos;
 	mouseDelta = newDelta - mouseAbsoluteDelta;

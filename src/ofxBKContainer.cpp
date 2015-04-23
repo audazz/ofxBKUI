@@ -1,6 +1,5 @@
 #pragma once
-#include "ofxBKContainer.h"
-#include "ofxBKUIComponent.h"
+#include "ofxBKUI.h"
 
 ofxBKContainer::ofxBKContainer()
 {
@@ -21,6 +20,7 @@ void ofxBKContainer::init(float _x, float _y, float _width, float _height )
 	paddingRight = 0;
 	numChildren = 0;
 	bgColor = ofColor(150,100);
+	transparentBG = false;
 }
 
 
@@ -28,11 +28,14 @@ void ofxBKContainer::draw()
 {
 	ofxBKUIComponent::draw();
 
-	ofPushStyle();
-	ofSetColor(bgColor);
-	ofRect(0,0,width,height);
-	
-	if(drawDebug)
+	if(!transparentBG)
+	{
+		ofPushStyle();
+		ofSetColor(bgColor);
+		ofRect(0,0,width,height);
+	}
+
+	if(drawDebug || ofxBKUI::drawDebug)
 	{
 		ofSetColor(ofColor::orange,100);
 		ofNoFill();

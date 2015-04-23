@@ -6,6 +6,7 @@
 
 #include "ofxBKContainer.h"
 #include "ofxBKButton.h"
+#include "ofxBKCheckBox.h"
 #include "ofxBKButtonBar.h"
 #include "ofxBKSlider.h"
 #include "ofxBKDoubleSlider.h"

@@ -25,7 +25,7 @@ void ofxBKDoubleSlider::draw()
 {
 	ofSetColor(isOver?overColor:bgColor,enabled?255:100);
 	ofRect(0,0,width,height);
-	ofSetColor(selectedColor,enabled?255:100);
+	ofSetColor(barColor,enabled?255:100);
 
 	float tx1 = getNormalizedValue(value)*(width-4);
 	float tx2 = getNormalizedValue(value2)*(width-4);

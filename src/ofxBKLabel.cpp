@@ -17,8 +17,7 @@ void ofxBKLabel::init(string _text, float _x, float _y, float _width,float _heig
 
 	drawDebug = false;
 
-	horizontalAlign = BKUI_TEXTALIGN_LEFT;
-	verticalAlign = BKUI_TEXTALIGN_TOP;
+	setAlign();
 
 	textColor = ofxBKStyle::lightColor;
 
@@ -66,6 +65,12 @@ void ofxBKLabel::setColor(ofColor color)
 	textColor.set(color);
 }
 
+void ofxBKLabel::setAlign(int horizontal, int vertical)
+{
+	horizontalAlign = horizontal;
+	verticalAlign = vertical;
+	updateTextOffset();
+}
 
 void ofxBKLabel::setPosition(float _x, float _y)
 {

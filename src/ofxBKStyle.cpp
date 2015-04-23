@@ -8,7 +8,7 @@ void ofxBKStyle::init()
 	smallFont.loadFont("Yanone.ttf", 10);
 	bigFont.loadFont("Yanone.ttf", 32);
 	 
-}	
+}	 
 
 
 ofTrueTypeFont ofxBKStyle::normalFont;
@@ -20,6 +20,7 @@ ofTrueTypeFont ofxBKStyle::bigFont;
 ofColor ofxBKStyle::bgColor(30,30,30);
 ofColor ofxBKStyle::normalColor(50,50,50);
 ofColor ofxBKStyle::darkColor(40,40,40);
+ofColor ofxBKStyle::semiLightColor(120,120,120);
 ofColor ofxBKStyle::lightColor(233, 233, 233);
 ofColor ofxBKStyle::highlightColor(252, 194, 3);
 ofColor ofxBKStyle::blue (63, 160, 239);

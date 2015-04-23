@@ -26,6 +26,7 @@ public :
 
 	int horizontalAlign;
 	int verticalAlign;
+	void setAlign(int horizontal = BKUI_TEXTALIGN_LEFT, int vertical = BKUI_TEXTALIGN_TOP);
 
 	virtual void setSize(float _width, float _height, bool notify = true);
 	

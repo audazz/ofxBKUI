@@ -12,8 +12,8 @@ void ofxBKButtonBar::init(float _x, float _y, float _width,float _height)
 	ofxBKContainer::init(_x, _y,_width,_height);
 	selectedIndex = -1;
 	selectedLabel = "";
-
-	bgColor = ofColor(0,0);
+	transparentBG = true;
+	allowMultipleSelection = false;
 }
 
 void ofxBKButtonBar::draw()
@@ -46,6 +46,8 @@ void ofxBKButtonBar::addOption(string label)
 {
 	ofxBKButton * bt = new ofxBKButton(label);
 	ofAddListener(bt->buttonSelected,this,&ofxBKButtonBar::btSelected);
+	ofAddListener(bt->buttonDeselected,this,&ofxBKButtonBar::btDeselected);
+	bt->isToggle = true;
 	addChild(bt);
 	buttons.push_back(bt);
 	numButtons = buttons.size();
@@ -61,7 +63,7 @@ void ofxBKButtonBar::setSelectedIndex(int index, bool notify)
 {
 	if(selectedIndex >= 0 && selectedIndex < numButtons)
 	{
-		buttons[selectedIndex]->setSelected(false,false);
+		if(!allowMultipleSelection) buttons[selectedIndex]->setSelected(false,false);
 	}
 
 	if(index >= 0 && index < numButtons)
@@ -69,6 +71,34 @@ void ofxBKButtonBar::setSelectedIndex(int index, bool notify)
 		selectedLabel = buttons[index]->getLabel();
 		selectedIndex = index;
 		buttons[selectedIndex]->setSelected(true,false);
+
+		selectedIndices.push_back(selectedIndex);
+		selectedLabels.push_back(selectedLabel);
+	}
+
+	if(notify)
+	{
+		ofxBKUIEventArgs args;
+		args.eventType = BKEVENT_SELECTION_CHANGED;
+		args.target = this;
+		ofNotifyEvent(selectionChanged,args);
+	}
+}
+
+void ofxBKButtonBar::setDeselectedIndex(int index, bool notify)
+{
+	
+	if(!allowMultipleSelection)
+	{
+		if(selectedIndex == index) buttons[index]->setSelected(true,false); //can't have no option selected, keep this one selected
+		return;
+	}
+
+	if(index >= 0 && index < numButtons)
+	{
+		int indexInArray = getIndexForSelectedIndex(index);
+		selectedIndices.erase(selectedIndices.begin()+indexInArray);
+		selectedLabels.erase(selectedLabels.begin()+indexInArray);
 	}
 
 	if(notify)
@@ -81,11 +111,32 @@ void ofxBKButtonBar::setSelectedIndex(int index, bool notify)
 }
 
 
+int ofxBKButtonBar::getIndexForSelectedIndex(int sIndex)
+{
+	for(int i=0;i<selectedIndices.size();i++)
+	{
+		if(selectedIndices[i] == sIndex) return i;
+	}
+
+	return -1;
+}
+
+
 void ofxBKButtonBar::btSelected(ofxBKUIEventArgs &e)
 {
-	printf("Selected \n");
 	ofxBKButton * bt = (ofxBKButton *)e.target;
 	setSelectedIndex(getIndexForButton(bt),true);
+}
+
+void ofxBKButtonBar::btDeselected(ofxBKUIEventArgs &e)
+{
+	ofxBKButton * bt = (ofxBKButton *)e.target;
+	setDeselectedIndex(getIndexForButton(bt),true);
+}
+
+void ofxBKButtonBar::setAllowMultipleSelection(bool allow)
+{
+	allowMultipleSelection = allow;
 }
 
 

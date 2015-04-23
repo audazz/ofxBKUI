@@ -31,6 +31,7 @@ public:
 	virtual void setVisible(bool value);
 
 	ofColor bgColor;
+	bool transparentBG;
 	
 protected:
 	virtual void init(float _x = 0, float _y = 0, float _width = 300, float _height = 200);

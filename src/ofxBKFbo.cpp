@@ -152,7 +152,7 @@ void ofxBKFbo::mouseDragged(ofMouseEventArgs &e)
 	ofxBKUIComponent::mouseDragged(e);
 	if(e.button == 0) 
 	{
-		cameraLongLat += mouseDelta * mouseSensitivity;
+		cameraLongLat -= mouseDelta * mouseSensitivity;
 		cameraLongLat.y = min<float>(max<float>(cameraLongLat.y,-100),100);
 	}
 

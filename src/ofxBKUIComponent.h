@@ -30,6 +30,8 @@ public:
 	
 	virtual void setSize(float _width, float _height, bool notify = true);
 
+	bool mouseEnabled;
+
 	ofxBKContainer * parent;
 	void setParent(ofxBKContainer *_parent);
 

@@ -15,7 +15,7 @@ void ofxBKPanel::init(string _title,  float _x, float _y, float _width, float _h
 
 	numChildren = 0;
 
-	title = new ofxBKLabel(_title,0,0);
+	title = new ofxBKLabel(_title,5,5);
 	//printf("After assignation position %s :%f\n",title->text.c_str(),title->position.y);
 	//title->setPosition(50,50);
 	addChild(title);

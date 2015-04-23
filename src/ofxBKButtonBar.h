@@ -12,7 +12,14 @@ public:
 
 	int selectedIndex;
 	void setSelectedIndex(int index, bool notify = true);
+	void setDeselectedIndex(int index, bool notify = true);
 	string selectedLabel;
+
+	bool allowMultipleSelection;
+	vector<int> selectedIndices;
+	vector<string> selectedLabels;
+
+	void setAllowMultipleSelection(bool allow);
 
 	virtual void setSize(float _width, float _height, bool notify = true);
 
@@ -29,7 +36,10 @@ private :
 	int numButtons;
 
 	void btSelected(ofxBKUIEventArgs &e);
-	
+	void btDeselected(ofxBKUIEventArgs &e);
+
+	int getIndexForSelectedIndex(int sIndex);
+
 	ofxBKButton * currentBT;
 
 	int getIndexForButton(ofxBKButton * bt);

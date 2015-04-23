@@ -1,6 +1,7 @@
 #pragma once
 #include "ofxBKSlider.h"
 #include "ofxBKUIEventArgs.h"
+#include "ofxBKStyle.h"
 
 ofxBKSlider::ofxBKSlider()
 {
@@ -24,19 +25,22 @@ void ofxBKSlider::init(string _label, float _x, float _y, float _width,float _he
 	labelTF->setColor(ofColor::white);
 	addChild(labelTF);
 
+	labelSuffix = "";
+
 	minValue = 0;
 	maxValue = 1;
-	value = .5;
+	setValue(.5);
 	mouseDragOffset = 0;
 	isDragging = false;
 
-	bgColor = ofColor(50,50,50); //ofxBKStyle::bgColor;
-	overColor = ofColor(80,80,80);//ofxBKStyle::normalColor;
-	selectedColor = ofColor(63, 160, 239);//ofxBKStyle::highlightColor;
-	labelColor = ofColor(144, 144, 144);//ofxBKStyle::normalColor;
-	labelOverColor = ofColor(233, 233, 233);//ofxBKStyle::lightColor;
-	labelSelectedColor =  ofColor(50,50,50);//ofxBKStyle::normalColor;
+	bgColor = ofxBKStyle::bgColor;
+	overColor = ofxBKStyle::normalColor;
+	selectedColor = ofxBKStyle::highlightColor;
+	labelColor = ofxBKStyle::normalColor;
+	labelOverColor = ofxBKStyle::lightColor;
+	labelSelectedColor =  ofxBKStyle::normalColor;
 
+	barColor = ofxBKStyle::blue;
 }
 
 void ofxBKSlider::draw()
@@ -45,14 +49,14 @@ void ofxBKSlider::draw()
 
 	ofSetColor(isOver?overColor:bgColor,enabled?255:100);
 	ofRect(0,0,width,height);
-	ofSetColor(selectedColor,enabled?255:100);
+	ofSetColor(barColor,enabled?255:100);
 	float tw = getNormalizedValue()*(width-4);
 	ofRect(2,2,tw,height-4);
 
 	if(isDragging)
 	{
 		ofSetLineWidth(3);
-		ofSetColor(ofColor(200,10,0));
+		ofSetColor(ofxBKStyle::red);
 		ofLine(tw+2,2,tw+2,height-2);
 	}
 }
@@ -63,6 +67,13 @@ void ofxBKSlider::setSize(float _width, float _height, bool notify)
 	labelTF->setSize(_width,_height);
 }
 */
+
+void ofxBKSlider::setLabel(string _label, string _labelSuffix)
+{
+	label = _label;
+	labelSuffix = _labelSuffix;
+	updateLabelTF();
+}
 
 float ofxBKSlider::getNormalizedValue()
 {
@@ -101,7 +112,7 @@ void ofxBKSlider::setMinMaxValues(float _min, float _max)
 void ofxBKSlider::updateLabelTF()
 {
 	char text[256];
-	sprintf(text, "%s : %.2f",label.c_str(),value);
+	sprintf(text, "%s : %.2f %s",label.c_str(),value,labelSuffix.c_str());
 	labelTF->setText(string(text));	
 }
 

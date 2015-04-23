@@ -6,10 +6,13 @@ class ofxBKSlider : public ofxBKContainer
 {
 public:
 	ofxBKSlider();
-	ofxBKSlider(string _label, float _x = 0, float _y = 0, float _width = 50, float _height = 20);
+	ofxBKSlider(string _label, float _x = 0, float _y = 0, float _width = 100, float _height = 20);
 	
 	ofxBKLabel * labelTF;
 	string label;
+	string labelSuffix;
+
+	void setLabel(string _label, string _labelSuffix = "");
 
 	float minValue;
 	float maxValue;
@@ -35,6 +38,8 @@ public:
 	ofColor labelColor;
 	ofColor labelOverColor;
 	ofColor labelSelectedColor;
+	
+	ofColor barColor;
 
 	ofEvent<ofxBKUIEventArgs> valueChanged;
 
