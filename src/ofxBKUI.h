@@ -12,6 +12,7 @@
 #include "ofxBKDoubleSlider.h"
 #include "ofxBKPanel.h"
 #include "ofxBKImage.h"
+#include "ofxBKZoomImage.h"
 #include "ofxBKUIComponent.h"
 
 

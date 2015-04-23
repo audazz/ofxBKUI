@@ -28,12 +28,15 @@ void ofxBKImage::draw()
 	ofSetColor(255);
 
 	if(targetImage != NULL) targetImage->draw(imageRect);
+	//image->drawSubsection(0,0,width,height,0,0,100,100);
 }
 
 void ofxBKImage::loadImage(string path)
 {
 	isLinked = false;
 	image->loadImage(path);
+	
+
 	unlink();
 }
 

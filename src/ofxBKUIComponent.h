@@ -68,7 +68,7 @@ public:
 
 	ofEvent<ofxBKUIEventArgs> resized;
 
-	virtual ofVec2f getMousePosition();
+	virtual ofVec2f getMousePosition(bool relative = false);
 
 protected :
 	virtual void init(float _x, float _y, float _width,float _height);

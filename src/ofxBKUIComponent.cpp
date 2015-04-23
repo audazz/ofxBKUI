@@ -374,7 +374,7 @@ bool ofxBKUIComponent::isMouseInside()
 	//return (ofGetMouseX() - finalPos && ofGetMouseX() < position.x+offset.x + width && ofGetMouseY() > position.y && ofGetMouseY() < position.y+height);
 }
 
-ofVec2f ofxBKUIComponent::getMousePosition()
+ofVec2f ofxBKUIComponent::getMousePosition(bool relative)
 {
 	return ofVec2f(ofGetMouseX(),ofGetMouseY())-getGlobalBounds().position;
 }
