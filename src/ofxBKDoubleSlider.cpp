@@ -38,11 +38,6 @@ void ofxBKDoubleSlider::draw()
 		ofSetColor(ofColor(200,10,0));
 		ofLine(tx+2,2,tx+2,height-2);
 	}
-
-	ofSetColor(255,150);
-	char info[64];
-	sprintf(info, "%s : %.2f / %.2f",label.c_str(),value, value2);
-	ofDrawBitmapString(info,5,15);
 }
 
 void ofxBKDoubleSlider::setValue(float _value, bool notify)
@@ -55,8 +50,10 @@ void ofxBKDoubleSlider::setValue2(float _value, bool notify)
 {
 	_value = max(value,_value);
 	_value = min(max(_value,minValue),maxValue);
+
 	if(value2 == _value) return;
 	value2 = _value;	
+	updateLabelTF();
 	if(notify) notifyValueChanged();
 }
 
@@ -76,6 +73,16 @@ ofVec2f ofxBKDoubleSlider::getNormalizedValues()
 {
 	return ofVec2f(getNormalizedValue(value),getNormalizedValue(value2));
 }
+
+
+void ofxBKDoubleSlider::updateLabelTF()
+{
+	char text[256];
+	sprintf(text, "%s : %.2f / %.2f",label.c_str(),value, value2);
+	labelTF->setText(string(text));	
+}
+
+
 
 void ofxBKDoubleSlider::mousePressed(ofMouseEventArgs &e)
 {

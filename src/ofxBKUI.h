@@ -18,5 +18,6 @@ class ofxBKUI
 {
 public :
 
+	static bool drawDebug;
 	static void init();
 };

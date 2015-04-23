@@ -14,8 +14,15 @@ ofxBKSlider::ofxBKSlider(string _label, float _x, float _y, float _width,float _
 void ofxBKSlider::init(string _label, float _x, float _y, float _width,float _height)
 {
 	//printf("BT init\n");
-	ofxBKUIComponent::init(_x, _y, _width, _height);
+	ofxBKContainer::init(_x, _y, _width, _height);
+
 	label = _label;
+	labelTF = new ofxBKLabel(_label);
+	labelTF->horizontalAlign = BKUI_TEXTALIGN_CENTER;
+	labelTF->verticalAlign = BKUI_TEXTALIGN_MIDDLE;
+	labelTF->setFluidWidth()->setFluidHeight();
+	labelTF->setColor(ofColor::white);
+	addChild(labelTF);
 
 	minValue = 0;
 	maxValue = 1;
@@ -34,7 +41,7 @@ void ofxBKSlider::init(string _label, float _x, float _y, float _width,float _he
 
 void ofxBKSlider::draw()
 {
-	ofxBKUIComponent::draw();
+	ofxBKContainer::draw();
 
 	ofSetColor(isOver?overColor:bgColor,enabled?255:100);
 	ofRect(0,0,width,height);
@@ -48,12 +55,14 @@ void ofxBKSlider::draw()
 		ofSetColor(ofColor(200,10,0));
 		ofLine(tw+2,2,tw+2,height-2);
 	}
-
-	ofSetColor(255,150);
-	char info[64];
-	sprintf(info, "%s : %.2f",label.c_str(),value);
-	ofDrawBitmapString(info,5,15);
 }
+/*
+void ofxBKSlider::setSize(float _width, float _height, bool notify)
+{
+	ofxBKContainer::setSize(_width,_height,notify);
+	labelTF->setSize(_width,_height);
+}
+*/
 
 float ofxBKSlider::getNormalizedValue()
 {
@@ -71,6 +80,7 @@ void ofxBKSlider::setValue(float _value, bool notify)
 	if(value == _value) return;
 	value = _value;
 	if(notify) notifyValueChanged();
+	updateLabelTF();
 }
 
 void ofxBKSlider::notifyValueChanged()
@@ -88,16 +98,24 @@ void ofxBKSlider::setMinMaxValues(float _min, float _max)
 	maxValue = _max;
 }
 
+void ofxBKSlider::updateLabelTF()
+{
+	char text[256];
+	sprintf(text, "%s : %.2f",label.c_str(),value);
+	labelTF->setText(string(text));	
+}
+
+
 void ofxBKSlider::mousePressed(ofMouseEventArgs &e)
 {
-	ofxBKUIComponent::mousePressed(e);
+	ofxBKContainer::mousePressed(e);
 	mouseDragOffset = getValueForPosition(getMousePosition().x) - value;
 	isDragging = true;
 }
 
 void ofxBKSlider::mouseDragged(ofMouseEventArgs &e)
 {
-	ofxBKUIComponent::mouseDragged(e);
+	ofxBKContainer::mouseDragged(e);
 	setValue(getValueForPosition(getMousePosition().x)-mouseDragOffset);
 }
 

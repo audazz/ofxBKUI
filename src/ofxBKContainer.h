@@ -7,9 +7,7 @@ public:
 	ofxBKContainer();
 	ofxBKContainer(float _x, float _y, float _width = 300, float _height = 200);
 
-	virtual void init(float _x = 0, float _y = 0, float _width = 300, float _height = 200);
-	virtual void draw();
-
+	
 	float paddingTop;
 	float paddingBottom;
 	float paddingLeft;
@@ -23,7 +21,6 @@ public:
 	float getInnerHeight();
 
 	virtual void setOffset(float _offsetX, float _offsetY);
-	virtual void setPosition(float _x, float _y);
 	virtual void setSize(float _width, float _height, bool notify = true);
 
 	vector<ofxBKUIComponent *> children;
@@ -32,8 +29,16 @@ public:
 
 
 	virtual void setVisible(bool value);
+
+	ofColor bgColor;
 	
 protected:
+	virtual void init(float _x = 0, float _y = 0, float _width = 300, float _height = 200);
+	virtual void draw();
+
+	virtual void setPosition(float _x, float _y);
+	
+
 	virtual void updateChildrenOffsets();
 	virtual void updateChildOffset(ofxBKUIComponent * child);
 

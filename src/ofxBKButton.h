@@ -1,15 +1,13 @@
 #pragma once
-#include "ofxBKUIComponent.h"
+#include "ofxBKContainer.h"
+#include "ofxBKLabel.h"
 
-
-class ofxBKButton : public ofxBKUIComponent
+class ofxBKButton : public ofxBKContainer
 {
 public:
-	ofxBKButton(string _label, float _x = 0, float _y = 0, float _width = 50, float _height = 20);
+	ofxBKButton(string _label, float _x = 0, float _y = 0, float _width = 0, float _height = 0);
 
-	void draw();
-
-	string label;
+	ofxBKLabel * label;
 
 	bool isToggle;
 	bool isSelected;
@@ -22,19 +20,26 @@ public:
 	ofColor labelColor;
 	ofColor labelOverColor;
 	ofColor labelSelectedColor;
-
+	
+	string getLabel();
+	void setLabel(string _label);
 	void setSelected(bool value, bool notify = true);
 
+	//virtual void setSize(float _width, float _height, bool notify = true);
 
 	ofEvent<ofxBKUIEventArgs> buttonSelected;
 	ofEvent<ofxBKUIEventArgs> buttonDeselected;
 
 protected:
-	void init(string _label, float _x, float _y, float _width,float _height);
+	virtual void init(string _label, float _x = 0, float _y = 0, float _width = 0,float _height = 0);
+	virtual void draw();
 
 	/*void mouseOver();
 	void mouseOut();
 	*/
+
+	void updateLabelColor();
+
 	void mouseOut();
 	void mousePressed(ofMouseEventArgs &e);
 	void mouseReleased(ofMouseEventArgs &e);

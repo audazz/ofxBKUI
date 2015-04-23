@@ -7,9 +7,6 @@ class ofxBKButtonBar : public ofxBKContainer
 public:
 	ofxBKButtonBar(float _x = 0, float _y = 0, float _width = 50, float _height = 20);
 
-	void init(float _x = 0, float _y = 0, float _width = 50, float _height = 20);
-	void draw();
-
 	void setOptions(vector<string> _options);
 	void addOption(string label);
 
@@ -24,6 +21,10 @@ public:
 	void updateButtonsPositions();
 	
 private :
+	void init(float _x = 0, float _y = 0, float _width = 50, float _height = 20);
+	void draw();
+
+
 	vector<ofxBKButton *> buttons;
 	int numButtons;
 

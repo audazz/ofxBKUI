@@ -1,7 +1,5 @@
 #pragma once
-#include "ofxBKUIComponent.h"
-#include "ofxBKUIEventArgs.h"
-#include "ofxBKContainer.h"
+#include "ofxBKUI.h"
 
 ofxBKUIComponent::ofxBKUIComponent()
 {
@@ -15,32 +13,18 @@ void ofxBKUIComponent::init(float _x, float _y, float _width,float _height)
 	isOver = false;
 	isPressed = false;
 
-	drawDebug = false;
+	drawDebug = false;  
 
 	parent = NULL;
 
-	
 	offset.set(0,0);
-	position.set(_x,_y);
-
-	top = 0;
-	bottom = _y;
-	left = 0;
-	right = _x;
 
 	minSize = ofVec2f::zero();
 	maxSize = ofVec2f::zero();
 
-	fixedWidth = true;
-	fixedHeight = true;
+	setAbsolutePosition(_x,_y);
+	setSize(_width,_height);
 
-	topIsRelative = false;
-	bottomIsRelative = false;
-	leftIsRelative = false;
-	rightIsRelative = false;
-	
-	width = _width;
-	height = _height;
 
 	ofAddListener(ofEvents().draw,this,&ofxBKUIComponent::drawHandler);
 	ofAddListener(ofEvents().mousePressed,this,&ofxBKUIComponent::mousePressedHandler);
@@ -53,7 +37,7 @@ void ofxBKUIComponent::draw()
 	//printf("Draw !\n");
 	//to be overriden
 
-	if(drawDebug)
+	if(drawDebug || ofxBKUI::drawDebug)
 	{
 		ofPushStyle();
 		ofSetColor(ofColor::red,100);
@@ -61,7 +45,12 @@ void ofxBKUIComponent::draw()
 		ofLine(0,-10,0,10);
 		ofSetColor(ofColor::purple,100);
 		ofNoFill();
+
+		/*
 		ofRect(0,0,width,height);
+		ofLine(-position.x,-position.y,0,0);
+		*/
+		
 		ofPopStyle();
 	}
 }
@@ -72,11 +61,13 @@ void ofxBKUIComponent::drawHandler(ofEventArgs& eventArgs)
 	if(!visible) return;
 
 	ofPushMatrix();
-	ofTranslate(offset);
-	ofTranslate(position);
-	ofPushStyle();
-	draw();
-	ofPopStyle();
+		ofTranslate(offset);
+		ofTranslate(position);
+		ofPushStyle();
+
+			draw();
+
+		ofPopStyle();
 	ofPopMatrix();
 
 	if(enabled)
@@ -96,6 +87,10 @@ void ofxBKUIComponent::mousePressedHandler(ofMouseEventArgs& eventArgs)
 	if(isMouseInside()) 
 	{
 		isPressed = true;
+		initMousePos = getMousePosition();
+		mouseDelta = ofVec2f::zero();
+		mouseAbsoluteDelta = ofVec2f::zero();
+
 		mousePressed(eventArgs);
 	}
 	
@@ -105,6 +100,7 @@ void ofxBKUIComponent::mouseReleasedHandler(ofMouseEventArgs& eventArgs)
 {
 	if(!enabled || !visible) return;
 
+	
 	if(isMouseInside()) mouseReleased(eventArgs);
 	else if(isPressed) mouseReleasedOutside(eventArgs);
 	isPressed = false;
@@ -114,6 +110,11 @@ void ofxBKUIComponent::mouseReleasedHandler(ofMouseEventArgs& eventArgs)
 void ofxBKUIComponent::mouseDraggedHandler(ofMouseEventArgs& eventArgs)
 {
 	if(!enabled || !visible) return;
+
+	ofVec2f newDelta = getMousePosition()-initMousePos;
+	mouseDelta = newDelta - mouseAbsoluteDelta;
+	mouseAbsoluteDelta = newDelta;
+
 	if(isPressed) mouseDragged(eventArgs);
 }
 
@@ -209,8 +210,6 @@ void ofxBKUIComponent::updatePosition()
 		setSize(tw,th);
 	}
 
-	
-
 	setPosition(tx,ty);
 	setSize(tw,th);
 	
@@ -235,6 +234,25 @@ void ofxBKUIComponent::setOffset(float _offsetX, float _offsetY)
 void ofxBKUIComponent::setPosition(float _x, float _y)
 {
 	position.set(_x, _y);
+}
+
+void ofxBKUIComponent::setAbsolutePosition(float _x, float _y)
+{
+	position.set(_x, _y);
+	top = 0;
+	bottom = _y;
+	left = 0;
+	right = _x;
+
+	fixedWidth = true;
+	fixedHeight = true;
+
+	topIsRelative = false;
+	bottomIsRelative = false;
+	leftIsRelative = false;
+	rightIsRelative = false;
+
+	updatePosition();
 }
 
 

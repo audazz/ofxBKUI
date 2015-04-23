@@ -20,6 +20,7 @@ void ofxBKContainer::init(float _x, float _y, float _width, float _height )
 	paddingLeft = 0;
 	paddingRight = 0;
 	numChildren = 0;
+	bgColor = ofColor(150,100);
 }
 
 
@@ -28,7 +29,7 @@ void ofxBKContainer::draw()
 	ofxBKUIComponent::draw();
 
 	ofPushStyle();
-	ofSetColor(150,100);
+	ofSetColor(bgColor);
 	ofRect(0,0,width,height);
 	
 	if(drawDebug)

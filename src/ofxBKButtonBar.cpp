@@ -5,7 +5,6 @@
 ofxBKButtonBar::ofxBKButtonBar(float _x, float _y, float _width,float _height)
 {
 	init(_x, _y, _width,_height);
-	
 }
 
 void ofxBKButtonBar::init(float _x, float _y, float _width,float _height)
@@ -13,6 +12,8 @@ void ofxBKButtonBar::init(float _x, float _y, float _width,float _height)
 	ofxBKContainer::init(_x, _y,_width,_height);
 	selectedIndex = -1;
 	selectedLabel = "";
+
+	bgColor = ofColor(0,0);
 }
 
 void ofxBKButtonBar::draw()
@@ -29,7 +30,7 @@ void ofxBKButtonBar::updateButtonsPositions()
 	for(int i=0;i<buttons.size();i++) 
 	{
 		ofxBKButton * bt = buttons[i];
-		bt->setPosition(i*(btWidth+gap),0);
+		bt->setAbsolutePosition(i*(btWidth+gap),0);
 		bt->setSize(btWidth,height);
 	}
 }
@@ -56,8 +57,6 @@ void ofxBKButtonBar::setOptions(vector<string> _options)
 	for(int i=0;i<_options.size();i++) addOption(_options[i]);
 }
 
-
-
 void ofxBKButtonBar::setSelectedIndex(int index, bool notify)
 {
 	if(selectedIndex >= 0 && selectedIndex < numButtons)
@@ -67,7 +66,7 @@ void ofxBKButtonBar::setSelectedIndex(int index, bool notify)
 
 	if(index >= 0 && index < numButtons)
 	{
-		selectedLabel = buttons[index]->label;
+		selectedLabel = buttons[index]->getLabel();
 		selectedIndex = index;
 		buttons[selectedIndex]->setSelected(true,false);
 	}

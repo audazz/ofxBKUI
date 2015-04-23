@@ -18,8 +18,7 @@ class ofxBKUIComponent
 {
 public:
 	ofxBKUIComponent();
-	virtual void draw();
-
+	
 	bool drawDebug;
 
 	bool enabled;
@@ -53,9 +52,8 @@ public:
 	virtual void setOffset(float _offsetX, float _offsetY);
 	virtual void setOffset(ofVec2f _offset){ setOffset(_offset.x,_offset.y); };
 	
-	virtual void setPosition(float _x, float _y);
-	virtual void setPosition(ofVec2f _position){ setOffset(_position.x,_position.y); };
-
+	virtual void setAbsolutePosition(float _x, float _y);
+	
 	virtual ofxBKUIComponent * setAdvancedFixedWidth(float _width, float _innerAnchor = BKUI_ANCHOR_CENTER, float _outerAnchor = BKUI_ANCHOR_CENTER, bool outerIsRelative = true, bool outerIsFromRight = false);
 	
 	virtual ofxBKUIComponent * setAdvancedFixedHeight(float _height, float innerAnchor = BKUI_ANCHOR_MIDDLE, float outerAnchor = BKUI_ANCHOR_MIDDLE, bool outerIsRelative = true, bool outerIsFromBottom = false);
@@ -72,7 +70,8 @@ public:
 
 protected :
 	virtual void init(float _x, float _y, float _width,float _height);
-	
+	virtual void draw();
+
 	void drawHandler(ofEventArgs& eventArgs);
 	void mousePressedHandler(ofMouseEventArgs& eventArgs);
 	void mouseReleasedHandler(ofMouseEventArgs& eventArgs);
@@ -89,6 +88,13 @@ protected :
 	bool isOver;
 
 	bool isMouseInside();
+
+	ofVec2f initMousePos;
+	ofVec2f mouseDelta;
+	ofVec2f mouseAbsoluteDelta;
+
+	virtual void setPosition(float _x, float _y);
+	virtual void setPosition(ofVec2f _position){ setOffset(_position.x,_position.y); };
 
 	void updatePosition();
 	virtual void parentResizedHandler(ofxBKUIEventArgs &e);

@@ -9,9 +9,15 @@ ofxBKImage::ofxBKImage(float _x, float _y, float _width,float _height)
 void ofxBKImage::init(float _x, float _y, float _width,float _height)
 {
 	//printf("BT init\n");
+	targetImage = NULL; //be sure there is no pointer there
+
 	ofxBKUIComponent::init(_x, _y, _width, _height);
-	image = new ofImage();
+
+	image = new ofImage(); //need to instantiate image before
 	fitMode = IMAGE_FIT;
+
+	isLinked = false;
+	linkedImage = NULL;
 }
 
 void ofxBKImage::draw()
@@ -21,13 +27,49 @@ void ofxBKImage::draw()
 	ofRect(0,0,width,height);
 	ofSetColor(255);
 
+	if(targetImage != NULL) targetImage->draw(imageRect);
+}
+
+void ofxBKImage::loadImage(string path)
+{
+	isLinked = false;
+	image->loadImage(path);
+	unlink();
+}
+
+void ofxBKImage::linkToOfImage(ofImage *_linkedImage)
+{
+	isLinked = true;
+	linkedImage = _linkedImage;
+	targetImage = linkedImage;
+	updateImagePosition();
+}
+
+void ofxBKImage::unlink()
+{
+	isLinked = false;
+	linkedImage = NULL;
+	targetImage = image;
+	updateImagePosition();
+}
+
+
+void ofxBKImage::setSize(float _width, float _height, bool notify)
+{
+	ofxBKUIComponent::setSize(_width, _height, notify);
+	updateImagePosition();
+}
+
+void ofxBKImage::updateImagePosition()
+{
+	if(targetImage == NULL) return;
 	float tx = 0;
 	float ty = 0;
-	float tw = image->width;
-	float th = image->height;
+	float tw = targetImage->width;
+	float th = targetImage->height;
 
 	float ratio = width/height;
-	float imageRatio = image->width*1.0/image->height;
+	float imageRatio = targetImage->width*1.0/targetImage->height;
 		
 	switch(fitMode)
 	{
@@ -44,7 +86,7 @@ void ofxBKImage::draw()
 			tx = (width-tw)/2;
 		}
 		break;
-
+		 
 	case IMAGE_FILL:
 		if(imageRatio < ratio)
 		{
@@ -66,5 +108,6 @@ void ofxBKImage::draw()
 		break;
 	}
 
-	image->draw(tx,ty,tw,th);
+	imageRect.set(tx, ty, tw, th);
+	
 }

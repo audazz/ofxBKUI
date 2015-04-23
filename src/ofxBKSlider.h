@@ -1,15 +1,16 @@
 #pragma once
-#include "ofxBKUIComponent.h"
+#include "ofxBKContainer.h"
+#include "ofxBKLabel.h"
 
-class ofxBKSlider : public ofxBKUIComponent
+class ofxBKSlider : public ofxBKContainer
 {
 public:
 	ofxBKSlider();
 	ofxBKSlider(string _label, float _x = 0, float _y = 0, float _width = 50, float _height = 20);
-	virtual void init(string _label, float _x = 0, float _y = 0, float _width = 50, float _height = 20);
-	virtual void draw();
-
+	
+	ofxBKLabel * labelTF;
 	string label;
+
 	float minValue;
 	float maxValue;
 	float value;
@@ -37,7 +38,14 @@ public:
 
 	ofEvent<ofxBKUIEventArgs> valueChanged;
 
+	//virtual void setSize(float _width, float _height, bool notify = true);
+
 protected:
+	virtual void init(string _label, float _x = 0, float _y = 0, float _width = 50, float _height = 20);
+	virtual void draw();
+
+	virtual void updateLabelTF();
+
 	void notifyValueChanged();
 	float getValueForPosition(float pos);
 	float getNormalizedValue(float value);
