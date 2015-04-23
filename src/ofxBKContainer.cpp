@@ -13,12 +13,12 @@ ofxBKContainer::ofxBKContainer(float _x, float _y, float _width, float _height )
 
 void ofxBKContainer::init(float _x, float _y, float _width, float _height )
 {
+	numChildren = 0;
 	ofxBKUIComponent::init(_x,_y,_width,_height);
 	paddingTop = 0;
 	paddingBottom = 0;
 	paddingLeft = 0;
 	paddingRight = 0;
-	numChildren = 0;
 	bgColor = ofColor(150,100);
 	transparentBG = false;
 }
