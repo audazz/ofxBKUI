@@ -7,7 +7,6 @@ void ofxBKStyle::init()
 	titleFont.loadFont("Yanone.ttf", 16);
 	smallFont.loadFont("Yanone.ttf", 10);
 	bigFont.loadFont("Yanone.ttf", 32);
-	 
 }	 
 
 

@@ -27,17 +27,32 @@ void ofxBKImage::draw()
 	ofRect(0,0,width,height);
 	ofSetColor(255);
 
-	if(targetImage != NULL) targetImage->draw(imageRect);
-	//image->drawSubsection(0,0,width,height,0,0,100,100);
+	if(targetImage != NULL)
+	{
+		targetImage->draw(imageRect);
+
+	}
 }
 
 void ofxBKImage::loadImage(string path)
 {
 	isLinked = false;
 	image->loadImage(path);
-	
-
 	unlink();
+	processImage();
+}
+
+void ofxBKImage::setFromPixels(ofPixels p)
+{
+	image->getPixelsRef() = p;
+    image->update();
+	unlink();
+	processImage();
+}
+
+void ofxBKImage::processImage()
+{
+	
 }
 
 void ofxBKImage::linkToOfImage(ofImage *_linkedImage)

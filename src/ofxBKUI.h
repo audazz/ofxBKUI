@@ -13,6 +13,7 @@
 #include "ofxBKPanel.h"
 #include "ofxBKImage.h"
 #include "ofxBKZoomImage.h"
+#include "ofxBKFbo.h"
 #include "ofxBKUIComponent.h"
 
 
@@ -21,5 +22,6 @@ class ofxBKUI
 public :
 
 	static bool drawDebug;
+	static bool freeze;
 	static void init();
 };

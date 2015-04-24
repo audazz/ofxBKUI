@@ -11,12 +11,17 @@ public:
 
 	ofImage originalImage;
 	ofImage cropImage;
-	virtual void loadImage(string path);
+	ofImage testImage;
+	//virtual void loadImage(string path);
 
+	vector<ofVec2f> lastPos;
+
+	
 protected:
 	virtual void init(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
 	virtual void draw();
+	
+	virtual void processImage();
 
-	virtual void mouseDragged(ofMouseEventArgs &e);
-
+	virtual void mousePressed(ofMouseEventArgs &e);
 };

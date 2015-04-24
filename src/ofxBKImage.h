@@ -21,8 +21,10 @@ public :
 	ofRectangle imageRect;
 
 	virtual void loadImage(string path);
+	virtual void setFromPixels(ofPixels pixels);
 	virtual void linkToOfImage(ofImage * imageRef);
 	virtual void unlink();
+	virtual void processImage();
 
 	virtual void setSize(float _width, float _height, bool notify = true);
 
@@ -30,6 +32,7 @@ protected :
 	virtual void init(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
 	virtual void draw();
 
+	
 	void updateImagePosition();
 
 	ofImage *targetImage;

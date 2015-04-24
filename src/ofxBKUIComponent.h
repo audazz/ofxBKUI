@@ -70,6 +70,9 @@ public:
 
 	virtual ofVec2f getMousePosition(bool relative = false);
 
+	//BRING TO FRONT MEGA TEMP !!
+	virtual void bringToFront();
+
 protected :
 	virtual void init(float _x, float _y, float _width,float _height);
 	virtual void draw();
@@ -100,4 +103,5 @@ protected :
 
 	void updatePosition();
 	virtual void parentResizedHandler(ofxBKUIEventArgs &e);
+
 };

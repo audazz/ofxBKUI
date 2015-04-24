@@ -37,10 +37,10 @@ void ofxBKUIComponent::draw()
 {
 	//printf("Draw !\n");
 	//to be overriden
+	if(ofxBKUI::freeze) return;
 
 	if(drawDebug || ofxBKUI::drawDebug)
 	{
-		printf("Draw debug");
 		ofPushStyle();
 		ofSetColor(ofColor::red,100);
 		ofLine(-10,0,10,0);
@@ -56,7 +56,7 @@ void ofxBKUIComponent::draw()
 
 void ofxBKUIComponent::drawHandler(ofEventArgs& eventArgs)
 {
-	if(!visible) return;
+	if(!visible || ofxBKUI::freeze) return;
 
 	ofPushMatrix();
 		ofTranslate(offset);
@@ -376,5 +376,17 @@ bool ofxBKUIComponent::isMouseInside()
 
 ofVec2f ofxBKUIComponent::getMousePosition(bool relative)
 {
-	return ofVec2f(ofGetMouseX(),ofGetMouseY())-getGlobalBounds().position;
+	ofVec2f mp = ofVec2f(ofGetMouseX(),ofGetMouseY())-getGlobalBounds().position;
+	if(relative) mp /= ofVec2f(width,height);
+	return mp;
+}
+
+
+
+//MEGA TEMP BRING TO FRONT
+
+void ofxBKUIComponent::bringToFront()
+{
+	ofRemoveListener(ofEvents().draw,this,&ofxBKUIComponent::drawHandler);
+	ofAddListener(ofEvents().draw,this,&ofxBKUIComponent::drawHandler);
 }
