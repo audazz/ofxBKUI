@@ -121,6 +121,16 @@ void ofxBKSlider::mousePressed(ofMouseEventArgs &e)
 {
 	ofxBKContainer::mousePressed(e);
 	mouseDragOffset = getValueForPosition(getMousePosition().x) - value;
+	ofHideCursor();
+
+	#ifdef _WIN32
+	LPPOINT pt = LPPOINT();
+	int x = ofGetWindowPositionX()+getGlobalBounds().x +value*width;
+	int y = ofGetWindowPositionY()+getGlobalBounds().y+getMousePosition().y;
+	SetCursorPos(x,y);
+	mouseDragOffset = 0;
+	#endif
+	
 	isDragging = true;
 }
 
@@ -132,11 +142,13 @@ void ofxBKSlider::mouseDragged(ofMouseEventArgs &e)
 
 void ofxBKSlider::mouseReleased(ofMouseEventArgs &e)
 {
+	ofShowCursor();
 	isDragging = false;
 }
 
 void ofxBKSlider::mouseReleasedOutside(ofMouseEventArgs &e)
 {
+	ofShowCursor();
 	isDragging = false;
 }
 

@@ -88,6 +88,17 @@ void ofxBKDoubleSlider::mousePressed(ofMouseEventArgs &e)
 {
 	currentDraggingValue = getNearestValueIndex(getValueForPosition(getMousePosition().x));
 	mouseDragOffset = getValueForPosition(getMousePosition().x) - (currentDraggingValue == 1?value:value2);
+	ofHideCursor();
+
+	#ifdef _WIN32
+	
+	LPPOINT pt = LPPOINT();
+	int x = ofGetWindowPositionX()+getGlobalBounds().x + (currentDraggingValue == 1?value:value2)*width;
+	int y = ofGetWindowPositionY()+getGlobalBounds().y+getMousePosition().y;
+	SetCursorPos(x,y);
+	mouseDragOffset = 0;
+	#endif
+
 	isDragging = true;
 }
 

@@ -9,7 +9,7 @@ ofxBKZoomImage::ofxBKZoomImage(float _x, float _y, float _width, float _height)
 
 void ofxBKZoomImage::init(float _x, float _y, float _width, float _height)
 {
-	ofxBKImage::init();
+	ofxBKImage::init(_x,_y,_width,_height);
 	zoomRect.set(0,0,400,400);
 	zoomAnchor.set(0,-1);
 }

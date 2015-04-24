@@ -1,5 +1,6 @@
 #pragma once
 #include "ofxBKCheckBox.h"
+#include "ofxBKStyle.h"
 
 ofxBKCheckbox::ofxBKCheckbox()
 {
@@ -13,6 +14,7 @@ ofxBKCheckbox::~ofxBKCheckbox()
 ofxBKCheckbox::ofxBKCheckbox(string _label, float _x, float _y, float _width,float _height)
 {	
 	init(_label, _x, _y, _width,_height);
+	labelSelectedColor = ofxBKStyle::lightColor;
 	
 }
 
