@@ -8,7 +8,7 @@ ofxBKSlider::ofxBKSlider()
 }
 
 ofxBKSlider::ofxBKSlider(string _label, float _x, float _y, float _width,float _height)
-{	
+{
 	init(_label, _x, _y, _width,_height);
 }
 
@@ -75,14 +75,24 @@ void ofxBKSlider::setLabel(string _label, string _labelSuffix)
 	updateLabelTF();
 }
 
+float ofxBKSlider::getValueFromNormalized()
+{
+	return getValueFromNormalized(value);
+}
+
+float ofxBKSlider::getValueFromNormalized(float _normValue)
+{
+	return (_normValue * (maxValue-minValue) + minValue);
+}
+
 float ofxBKSlider::getNormalizedValue()
 {
 	return getNormalizedValue(value);
 }
 
-float ofxBKSlider::getNormalizedValue(float value)
+float ofxBKSlider::getNormalizedValue(float _value)
 {
-	return (value-minValue)/(maxValue-minValue);
+	return (_value-minValue)/(maxValue-minValue);
 }
 
 void ofxBKSlider::setValue(float _value, bool notify)
@@ -100,27 +110,30 @@ void ofxBKSlider::notifyValueChanged()
 	args.eventType = BKEVENT_VALUE_CHANGED;
 	args.target = this;
 	ofNotifyEvent(valueChanged,args);
-	
+
 }
 
 void ofxBKSlider::setMinMaxValues(float _min, float _max)
 {
 	minValue = _min;
 	maxValue = _max;
+	setValue((maxValue+minValue)/2);
 }
 
 void ofxBKSlider::updateLabelTF()
 {
 	char text[256];
 	sprintf(text, "%s : %.2f %s",label.c_str(),value,labelSuffix.c_str());
-	labelTF->setText(string(text));	
+	labelTF->setText(string(text));
 }
 
 
 void ofxBKSlider::mousePressed(ofMouseEventArgs &e)
 {
 	ofxBKContainer::mousePressed(e);
-	mouseDragOffset = getValueForPosition(getMousePosition().x) - value;
+	std::cout << "posv " << getNormalizedValue() << "" << std::endl;
+	std::cout << "posm " << getValueForPosition(getMousePosition().x) << "" << std::endl;
+	mouseDragOffset = getValueForPosition(getMousePosition().x) - getNormalizedValue();
 	ofHideCursor();
 
 	#ifdef _WIN32
@@ -130,14 +143,14 @@ void ofxBKSlider::mousePressed(ofMouseEventArgs &e)
 	SetCursorPos(x,y);
 	mouseDragOffset = 0;
 	#endif
-	
+
 	isDragging = true;
 }
 
 void ofxBKSlider::mouseDragged(ofMouseEventArgs &e)
 {
 	ofxBKContainer::mouseDragged(e);
-	setValue(getValueForPosition(getMousePosition().x)-mouseDragOffset);
+	setValue(getValueFromNormalized(getValueForPosition(getMousePosition().x)-mouseDragOffset));
 }
 
 void ofxBKSlider::mouseReleased(ofMouseEventArgs &e)

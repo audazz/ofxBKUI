@@ -5,7 +5,7 @@ class ofxBKFbo : public ofxBKUIComponent
 {
 public :
 	ofxBKFbo(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
-	
+
 	ofFbo * fbo;
 	ofFbo * linkedFbo;
 
@@ -33,7 +33,8 @@ public :
 	void lockCameraTo(ofVec3f lookAt = ofVec3f::zero(),bool mouseOrbit = true);
 	void unlockCamera();
 
-	
+    ofEasyCam * getCamera();
+
 
 	virtual void setSize(float _width, float _height, bool notify = true);
 
@@ -45,5 +46,5 @@ protected :
 	void mouseDragged(ofMouseEventArgs &e);
 
 	ofFbo *targetFbo;
-	ofCamera camera;
+	ofEasyCam camera;
 };

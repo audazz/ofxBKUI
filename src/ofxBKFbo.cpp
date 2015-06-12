@@ -3,7 +3,7 @@
 #include "ofxBKImage.h"
 
 ofxBKFbo::ofxBKFbo(float _x, float _y, float _width,float _height)
-{	
+{
 	init(_x, _y, _width,_height);
 }
 
@@ -21,17 +21,19 @@ void ofxBKFbo::init(float _x, float _y, float _width,float _height)
 	linkedFbo = NULL;
 
 	camera.setNearClip(0.001);
+
+	//camera.setScale(1, -1, 1);
 	cameraLocked = false;
 	mouseOrbitEnabled = false;
 	cameraLookAt = ofVec3f::zero();
 	cameraLongLat = ofVec2f::zero();
 	mouseSensitivity = 1;
-	cameraRadius = 1;
+	cameraRadius = 1.5;
 }
 
 void ofxBKFbo::draw()
 {
-	
+
 	ofxBKUIComponent::draw();
 	ofSetColor(0,50);
 	ofRect(0,0,width,height);
@@ -61,10 +63,15 @@ void ofxBKFbo::unlockCamera()
 	cameraLocked = false;
 }
 
+ofEasyCam * ofxBKFbo::getCamera()
+{
+    return &camera;
+}
 
 void ofxBKFbo::beginFbo()
 {
 	targetFbo->begin(false);
+
 	if(cameraLocked)
 	{
 		camera.begin();
@@ -106,7 +113,7 @@ void ofxBKFbo::updateFboPosition()
 
 	float ratio = width/height;
 	float imageRatio = targetFbo->getWidth()*1.0/targetFbo->getHeight();
-		
+
 	switch(fitMode)
 	{
 	case IMAGE_FIT:
@@ -122,7 +129,7 @@ void ofxBKFbo::updateFboPosition()
 			tx = (width-tw)/2;
 		}
 		break;
-		 
+
 	case IMAGE_FILL:
 		if(imageRatio < ratio)
 		{
@@ -150,11 +157,12 @@ void ofxBKFbo::updateFboPosition()
 void ofxBKFbo::mouseDragged(ofMouseEventArgs &e)
 {
 	ofxBKUIComponent::mouseDragged(e);
-	if(e.button == 0) 
-	{
-		cameraLongLat -= mouseDelta * mouseSensitivity;
-		cameraLongLat.y = min<float>(max<float>(cameraLongLat.y,-100),100);
-	}
-
-	else if(e.button = 1) cameraRadius += mouseDelta.y * mouseSensitivity*.01;
+	if (isMouseInside()){
+        if(e.button == 0) {
+            cameraLongLat -= mouseDelta * mouseSensitivity;
+            cameraLongLat.y = min<float>(max<float>(cameraLongLat.y,-100),100);
+        }
+        else if(e.button = 1)
+            cameraRadius += mouseDelta.y * mouseSensitivity*.01;
+    }
 }

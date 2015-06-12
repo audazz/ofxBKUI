@@ -1,4 +1,3 @@
-#pragma once
 #include "ofxBKUI.h"
 
 ofxBKLabel::ofxBKLabel()

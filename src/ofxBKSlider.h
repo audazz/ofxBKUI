@@ -7,7 +7,7 @@ class ofxBKSlider : public ofxBKContainer
 public:
 	ofxBKSlider();
 	ofxBKSlider(string _label, float _x = 0, float _y = 0, float _width = 100, float _height = 20);
-	
+
 	ofxBKLabel * labelTF;
 	string label;
 	string labelSuffix;
@@ -34,11 +34,11 @@ public:
 	ofColor bgColor;
 	ofColor	overColor;
 	ofColor selectedColor;
-	
+
 	ofColor labelColor;
 	ofColor labelOverColor;
 	ofColor labelSelectedColor;
-	
+
 	ofColor barColor;
 
 	ofEvent<ofxBKUIEventArgs> valueChanged;
@@ -54,4 +54,7 @@ protected:
 	void notifyValueChanged();
 	float getValueForPosition(float pos);
 	float getNormalizedValue(float value);
+    float getValueFromNormalized();
+    float getValueFromNormalized(float _normValue);
+
 };

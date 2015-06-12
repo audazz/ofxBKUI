@@ -1,4 +1,3 @@
-#pragma once
 #include "ofxBKUI.h"
 
 ofxBKUIComponent::ofxBKUIComponent()
@@ -14,7 +13,7 @@ void ofxBKUIComponent::init(float _x, float _y, float _width,float _height)
 	isPressed = false;
 	mouseEnabled = true;
 
-	drawDebug = false;  
+	drawDebug = false;
 
 	parent = NULL;
 
@@ -48,7 +47,7 @@ void ofxBKUIComponent::draw()
 		ofSetColor(ofColor::purple,100);
 		ofNoFill();
 		ofRect(0,0,width,height);
-		
+
 		ofPopStyle();
 	}
 }
@@ -82,7 +81,7 @@ void ofxBKUIComponent::mousePressedHandler(ofMouseEventArgs& eventArgs)
 {
 	if(!enabled || !visible || !mouseEnabled) return;
 
-	if(isMouseInside()) 
+	if(isMouseInside())
 	{
 		isPressed = true;
 		initMousePos = getMousePosition();
@@ -91,18 +90,18 @@ void ofxBKUIComponent::mousePressedHandler(ofMouseEventArgs& eventArgs)
 
 		mousePressed(eventArgs);
 	}
-	
+
 }
 
 void ofxBKUIComponent::mouseReleasedHandler(ofMouseEventArgs& eventArgs)
 {
 	if(!enabled || !visible || !mouseEnabled) return;
 
-	
+
 	if(isMouseInside()) mouseReleased(eventArgs);
 	else if(isPressed) mouseReleasedOutside(eventArgs);
 	isPressed = false;
-	
+
 }
 
 void ofxBKUIComponent::mouseDraggedHandler(ofMouseEventArgs& eventArgs)
@@ -131,7 +130,7 @@ void ofxBKUIComponent::mouseOut()
 void ofxBKUIComponent::mousePressed(ofMouseEventArgs& eventArgs)
 {
 	//printf("mouse pressed in uiComponent\n");
-	
+
 }
 
 void ofxBKUIComponent::mouseReleased(ofMouseEventArgs& eventArgs)
@@ -164,9 +163,9 @@ void ofxBKUIComponent::updatePosition()
 	float ty = position.y;
 	float tw = width;
 	float th = height;
-	
+
 	float outerTarget = 0;
-	
+
 	if(parent != NULL)
 	{
 		float pw = parent->getInnerWidth();
@@ -176,11 +175,11 @@ void ofxBKUIComponent::updatePosition()
 		{
 			float leftOffset = left*width;
 			outerTarget = 0;
-			
-			outerTarget = rightIsRelative?right*pw:right;			
+
+			outerTarget = rightIsRelative?right*pw:right;
 			if(leftIsRelative) outerTarget = pw-outerTarget;
 
-			tx = outerTarget - leftOffset; 
+			tx = outerTarget - leftOffset;
 		}else
 		{
 			tx = leftIsRelative?pw*left:left;
@@ -192,11 +191,11 @@ void ofxBKUIComponent::updatePosition()
 		{
 			float topOffset = top*height;
 			outerTarget = 0;
-			
-			outerTarget = bottomIsRelative?bottom*ph:bottom;			
+
+			outerTarget = bottomIsRelative?bottom*ph:bottom;
 			if(topIsRelative) outerTarget = ph-outerTarget;
 
-			ty = outerTarget - topOffset; 
+			ty = outerTarget - topOffset;
 		}else
 		{
 			ty = topIsRelative?ph*top:top;
@@ -210,7 +209,7 @@ void ofxBKUIComponent::updatePosition()
 
 	setPosition(tx,ty);
 	setSize(tw,th);
-	
+
 }
 
 //Setter
@@ -266,7 +265,7 @@ ofxBKUIComponent * ofxBKUIComponent::setAdvancedFixedWidth(float _width, float i
 
 	return this;
 }
-	
+
 
 ofxBKUIComponent * ofxBKUIComponent::setAdvancedFixedHeight(float _height, float innerAnchor, float outerAnchor, bool outerIsRelative, bool outerIsFromBottom)
 {
@@ -312,12 +311,12 @@ void ofxBKUIComponent::setSize(float _width, float _height, bool notify)
 	_height = max(_height, minSize.y);
 	if(maxSize.x > 0) _width = min(_width,maxSize.x);
 	if(maxSize.y > 0) _width = min(_height,maxSize.y);
-	
+
 	if(_width == width && _height == height) return; //too hard ?
-	
+
 	width = _width;
 	height = _height;
-	
+
 	if(notify)
 	{
 		ofxBKUIEventArgs args;
@@ -369,7 +368,7 @@ ofRectangle ofxBKUIComponent::getGlobalBounds()
 bool ofxBKUIComponent::isMouseInside()
 {
 	//printf("Is Mouse Inside ? %f %f %f %f\n",ofGetMouseX(), ofGetMouseY(),position.x, position.y);
-	
+
 	return getGlobalBounds().inside(ofGetMouseX(),ofGetMouseY());
 	//return (ofGetMouseX() - finalPos && ofGetMouseX() < position.x+offset.x + width && ofGetMouseY() > position.y && ofGetMouseY() < position.y+height);
 }
