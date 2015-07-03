@@ -131,8 +131,8 @@ void ofxBKSlider::updateLabelTF()
 void ofxBKSlider::mousePressed(ofMouseEventArgs &e)
 {
 	ofxBKContainer::mousePressed(e);
-	std::cout << "posv " << getNormalizedValue() << "" << std::endl;
-	std::cout << "posm " << getValueForPosition(getMousePosition().x) << "" << std::endl;
+	//std::cout << "posv " << getNormalizedValue() << "" << std::endl;
+	//std::cout << "posm " << getValueForPosition(getMousePosition().x) << "" << std::endl;
 	mouseDragOffset = getValueForPosition(getMousePosition().x) - getNormalizedValue();
 	ofHideCursor();
 

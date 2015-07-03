@@ -20,7 +20,11 @@ void ofxBKFbo::init(float _x, float _y, float _width,float _height)
 	isLinked = false;
 	linkedFbo = NULL;
 
-	camera.setNearClip(0.001);
+	camera.disableMouseInput();
+	//camera.disableMouseMiddleButton();
+	//camera.enableMouseInput();
+
+	//camera.setNearClip(1);
 
 	//camera.setScale(1, -1, 1);
 	cameraLocked = false;
@@ -29,6 +33,16 @@ void ofxBKFbo::init(float _x, float _y, float _width,float _height)
 	cameraLongLat = ofVec2f::zero();
 	mouseSensitivity = 1;
 	cameraRadius = 1.5;
+	nearClip = 0.001;
+	farClip = 0;
+
+	camera.setNearClip(nearClip);
+	camera.setFarClip(farClip);
+	camera.setDistance(cameraRadius);
+    lockCameraTo(cameraLookAt, true);
+
+    // default rotation axes:
+    setRotationAxes();
 }
 
 void ofxBKFbo::draw()
@@ -63,7 +77,53 @@ void ofxBKFbo::unlockCamera()
 	cameraLocked = false;
 }
 
-ofEasyCam * ofxBKFbo::getCamera()
+void ofxBKFbo::setCameraRadius(float radius)
+{
+    cameraRadius = radius;
+}
+
+void ofxBKFbo::setFOV(float fov)
+{
+    cameraFov = fov;
+}
+
+void ofxBKFbo::setClipping(float near, float far)
+{
+    nearClip = near;
+    farClip = far;
+}
+
+
+void ofxBKFbo::setRotationAxes(const ofVec2f & ax1, const ofVec2f & ax2)
+{
+    rotateAx1.set(ax1);
+    rotateAx2.set(ax2);
+}
+
+
+void ofxBKFbo::setRotationAxes(CAM_ROTATION rotParam)
+{
+    switch (rotParam) {
+    case Z_IN_FRONT:
+        rotateAx1.set(1,0,0);
+        rotateAx2.set(0,0,1);
+        break;
+
+    case Z_ON_TOP:
+        rotateAx1.set(0,1,0);
+        rotateAx2.set(0,0,1);
+        break;
+    case X_ON_TOP:
+        rotateAx1.set(0,0,1);
+        rotateAx2.set(1,0,0);
+        break;
+
+    }
+
+}
+
+
+const ofEasyCam * ofxBKFbo::getCamera()
 {
     return &camera;
 }
@@ -75,7 +135,18 @@ void ofxBKFbo::beginFbo()
 	if(cameraLocked)
 	{
 		camera.begin();
-		camera.orbit(cameraLongLat.x,cameraLongLat.y,cameraRadius,cameraLookAt);
+		cameraLongLat.y = ofClamp(cameraLongLat.y,-89.0,89.0);
+		ofVec3f p = orbit(rotateAx1, cameraLongLat.y,
+                          rotateAx2, cameraLongLat.x,
+                          cameraRadius);
+        camera.setPosition(p);
+		camera.setTarget(cameraLookAt);
+		camera.lookAt(cameraLookAt,rotateAx2);
+		//camera.lookAt()
+		camera.setFov(cameraFov);
+		camera.setNearClip(nearClip);
+		camera.setFarClip(farClip);
+		//camera.orbit(cameraLongLat.x,cameraLongLat.y,cameraRadius,cameraLookAt);
 	}
 }
 
@@ -102,6 +173,7 @@ void ofxBKFbo::setSize(float _width, float _height, bool notify)
 	ofxBKUIComponent::setSize(_width, _height, notify);
 	updateFboPosition();
 }
+
 
 void ofxBKFbo::updateFboPosition()
 {
@@ -154,15 +226,27 @@ void ofxBKFbo::updateFboPosition()
 	fboRect.set(tx, ty, tw, th);
 }
 
+
+ofVec3f ofxBKFbo::orbit(ofVec3f ax1, float angle1, ofVec3f ax2, float angle2, float radius)
+{//ofClamp(angle1, -89, 89)
+
+    ofVec3f p = - ax2.getPerpendicular(ax1).normalize() * radius;
+	p.rotate(angle1, ax1);
+	p.rotate(angle2, ax2);
+	p += cameraLookAt;
+	return p;
+}
+
+
 void ofxBKFbo::mouseDragged(ofMouseEventArgs &e)
 {
 	ofxBKUIComponent::mouseDragged(e);
 	if (isMouseInside()){
         if(e.button == 0) {
             cameraLongLat -= mouseDelta * mouseSensitivity;
-            cameraLongLat.y = min<float>(max<float>(cameraLongLat.y,-100),100);
+            //cameraLongLat.y = min<float>(max<float>(cameraLongLat.y,-100),100);
         }
         else if(e.button = 1)
-            cameraRadius += mouseDelta.y * mouseSensitivity*.01;
+            cameraRadius += cameraRadius * mouseDelta.y * mouseSensitivity*.01;
     }
 }

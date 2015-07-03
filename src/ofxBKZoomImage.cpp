@@ -8,9 +8,12 @@ ofxBKZoomImage::ofxBKZoomImage(float _x, float _y, float _width, float _height)
 
 void ofxBKZoomImage::init(float _x, float _y, float _width, float _height)
 {
+    isInzoomMode = false;
     zoomLevel = 2;
+    zoomSensitivity = 0.5;
     zoomBckColor = ofColor(0,0,0);
     zoomRecConstSize = true;
+    mouseStartAbsPos.set(0,0);
 
     zoomRectMaxSize[0] = 400;// in pixel !
     zoomRectMaxSize[1] = 400;
@@ -36,15 +39,9 @@ void ofxBKZoomImage::draw()
         int hCropRect = (int)(std::min( zoomRectMaxSize[1], targetImage->height ) /zoomLevel);
 
         // smooth mouse position
-        lastPos.push_back(getMousePosition());
-        if(lastPos.size() > 5)
-            lastPos.erase(lastPos.begin());
+        ofVec2f pointerPos = getSmoothMousePosition();
 
-		ofVec2f pointerPos, pointerPosInImage;
-        for(unsigned i=0;i<lastPos.size();i++)
-            pointerPos += lastPos[i];
-        pointerPos /=lastPos.size();
-
+		ofVec2f pointerPosInImage;
 
 		ofVec2f deltaIm(wCropRect, hCropRect);
 		ofVec2f scaleIm(targetImage->width, targetImage->height);
@@ -123,6 +120,11 @@ void ofxBKZoomImage::draw()
             ofRect(destRectFull);
 		ofPopStyle();
 
+
+        isInzoomMode = true;;
+
+	}else {
+        isInzoomMode = false;
 	}
 }
 
@@ -140,4 +142,36 @@ void ofxBKZoomImage::mousePressed(ofMouseEventArgs &e)
 	bringToFront();
 }
 
+
+/** @brief getSmoothMousePosition
+  *
+  * @todo: document this function
+  */
+ofVec2f ofxBKZoomImage::getSmoothMousePosition()
+{
+    ofVec2f pointerPos = getMousePosition();
+    if (!isInzoomMode){
+        mouseStartAbsPos = pointerPos;
+        lastPos.clear();
+        //std::cout << "zoom Mode:"<< mouseStartAbsPos << std::endl;
+    }
+
+    ofVec2f deltaMouse = pointerPos - mouseStartAbsPos;
+
+    pointerPos = mouseStartAbsPos + deltaMouse * zoomSensitivity;
+
+
+    lastPos.push_back(pointerPos);
+
+    if (lastPos.size()>5)
+        lastPos.erase(lastPos.begin());
+
+    pointerPos.set(0);
+    for(unsigned i=0;i<lastPos.size();i++){
+        pointerPos += lastPos[i];
+    }
+    pointerPos /= lastPos.size();
+
+    return pointerPos;
+}
 

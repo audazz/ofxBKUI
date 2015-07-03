@@ -8,7 +8,6 @@ ofxBKImage::ofxBKImage(float _x, float _y, float _width,float _height)
 
 void ofxBKImage::init(float _x, float _y, float _width,float _height)
 {
-    isResizedForDraw = false;
     maxSize = 1024;
 	//printf("BT init\n");
 	drawedImage = NULL; //be sure there is no pointer there
@@ -18,6 +17,7 @@ void ofxBKImage::init(float _x, float _y, float _width,float _height)
 	imageDefault = new ofImage(); //need to instantiate image before
 	fitMode = IMAGE_FIT;
 
+    isResizedForDraw = false;
 	isLinked = false;
 	linkedImage = NULL;
 }
@@ -161,7 +161,6 @@ void ofxBKImage::updateImagePosition()
 	}
 
 	imageRect.set(tx, ty, tw, th);
-
 }
 
 

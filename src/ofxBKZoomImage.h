@@ -20,12 +20,17 @@ public:
 
 
 protected:
-    int zoomRectMaxSize[2];
-    float zoomLevel;
 	virtual void init(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
 	virtual void draw();
 
 	virtual void processImageForDrawing();
 
 	virtual void mousePressed(ofMouseEventArgs &e);
+	ofVec2f getSmoothMousePosition();
+
+	ofVec2f mouseStartAbsPos;
+    int zoomRectMaxSize[2];
+    float zoomLevel;
+    float zoomSensitivity;
+    bool isInzoomMode;
 };
