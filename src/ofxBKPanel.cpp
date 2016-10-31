@@ -37,13 +37,16 @@ void ofxBKPanel::draw()
 
 string ofxBKPanel::getTitle()
 {
-	return title->text;
+    if (title != nullptr)
+        return title->text;
+    else
+        return "";
 }
 
 void ofxBKPanel::setTitle(string _title)
 {
 	showTitle = strlen(_title.c_str()) > 0;
-	headerHeight = showTitle?20:0;
+	headerHeight = showTitle ? 20 : 0;
 	title->setText(_title);
 }
 
@@ -51,5 +54,11 @@ void ofxBKPanel::setPadding(float top, float bottom, float left, float right)
 {
 	ofxBKContainer::setPadding(top + headerHeight,bottom,left,right);
 	title->setAbsolutePosition(5,-headerHeight+5);
-	
+
+}
+
+void ofxBKPanel::printInfo()
+{
+    ofxBKContainer::printInfo();
+    std::cout << "   ofxBKPanel:" << getTitle() << "" << std::endl;
 }

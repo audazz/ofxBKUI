@@ -5,7 +5,7 @@ class ofxBKFbo : public ofxBKUIComponent
 {
 public :
 	ofxBKFbo(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
-
+    virtual ~ofxBKFbo() {/*std::cout << "!ofxBKFbo!" << this <<"!";*/};
 	ofFbo * fbo;
 	ofFbo * linkedFbo;
 
@@ -37,6 +37,8 @@ public :
     void setFOV(float fov);
     void setClipping(float near = 0, float far = 0);
 
+    bool getCameraChanged() {return cameraChanged;};
+
     enum CAM_ROTATION{
         Z_IN_FRONT,
         Z_ON_TOP,
@@ -52,6 +54,7 @@ public :
 
     ofVec3f orbit(ofVec3f ax1, float angle1, ofVec3f ax2, float angle2, float radius);
 
+    virtual void printInfo();
 protected :
 	virtual void init(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
 	virtual void draw();
@@ -62,4 +65,6 @@ protected :
 	ofFbo *targetFbo;
 	ofEasyCam camera;
 	ofVec3f rotateAx1, rotateAx2;
+
+	bool cameraChanged = true;
 };

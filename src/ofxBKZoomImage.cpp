@@ -175,3 +175,10 @@ ofVec2f ofxBKZoomImage::getSmoothMousePosition()
     return pointerPos;
 }
 
+
+
+void ofxBKZoomImage::printInfo()
+{
+ofxBKImage::printInfo();
+std::cout << "   ofxBKZoomImage:"  << "" << std::endl;
+}

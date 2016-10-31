@@ -15,6 +15,11 @@
 #include "ofxBKZoomImage.h"
 #include "ofxBKFbo.h"
 #include "ofxBKUIComponent.h"
+#include "ofxBKTextEdit.h"
+#include "ofxBKLayout.h"
+#include "ofxBKLabelSelect.h"
+#include "ofxBKIntegerInput.h"
+#include "ofxBKUITextBox.h"
 
 
 class ofxBKUI
@@ -23,5 +28,7 @@ public :
 
 	static bool drawDebug;
 	static bool freeze;
+	static bool childMinSize2Parents;
 	static void init();
+
 };

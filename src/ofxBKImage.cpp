@@ -1,5 +1,9 @@
-#pragma once
 #include "ofxBKImage.h"
+ofxBKImage::~ofxBKImage()
+{
+    //std::cout << "!ofxBKImage!" << this <<"!";
+    unloadImage();
+}
 
 ofxBKImage::ofxBKImage(float _x, float _y, float _width,float _height)
 {
@@ -10,16 +14,15 @@ void ofxBKImage::init(float _x, float _y, float _width,float _height)
 {
     maxSize = 1024;
 	//printf("BT init\n");
-	drawedImage = NULL; //be sure there is no pointer there
+	drawedImage = nullptr; //be sure there is no pointer there
 
 	ofxBKUIComponent::init(_x, _y, _width, _height);
 
-	imageDefault = new ofImage(); //need to instantiate image before
 	fitMode = IMAGE_FIT;
 
     isResizedForDraw = false;
 	isLinked = false;
-	linkedImage = NULL;
+	linkedImage = nullptr;
 }
 
 void ofxBKImage::draw()
@@ -29,82 +32,9 @@ void ofxBKImage::draw()
 	ofRect(0,0,width,height);
 	ofSetColor(255);
 
-	if(drawedImage != NULL)
+	if(drawedImage != nullptr)
 		drawedImage->draw(imageRect);
 }
-
-void ofxBKImage::loadImage(string path)
-{
-	unlink();
-    isResizedForDraw = false;
-	imageInternal->loadImage(path);
-	targetImage = imageInternal;
-	processImageForDrawing();
-}
-void ofxBKImage::setFromPixels(ofPixels p)
-{
-	unlink();
-    isResizedForDraw = false;
-	imageInternal->getPixelsRef() = p;
-    imageInternal->update();
-	processImageForDrawing();
-}
-void ofxBKImage::unloadImage()
-{
-    if (imageInternal!=NULL)
-        delete imageInternal;
-    imageInternal = NULL;
-
-	targetImage = imageDefault;
-    unallocateDrawImage();
-    isResizedForDraw = false;
-}
-
-
-void ofxBKImage::linkToOfImage(ofImage *_linkedImage)
-{
-	isLinked = true;
-    isResizedForDraw = false;
-	linkedImage = _linkedImage;
-	targetImage = linkedImage;
-	processImageForDrawing();
-	updateImagePosition();
-}
-void ofxBKImage::unlink()
-{
-	isLinked = false;
-	linkedImage = NULL;
-
-	drawedImage = imageDefault;
-	unallocateDrawImage();
-
-    isResizedForDraw = false;
-}
-
-void ofxBKImage::processImageForDrawing()
-{
-    // unallocate previously allocated resized image
-    unallocateDrawImage();
-
-	float iw = targetImage->width;
-	float ih = targetImage->height;
-
-	if(maxSize > 0 && iw > maxSize || ih > maxSize)
-	{
-	    isResizedForDraw = true;
-	    printf("cloning... ");
-	    drawedImage = new ofImage;
-	    drawedImage->clone(*targetImage);
-	    printf("ok!\n");
-		if(iw >= ih && iw > maxSize)
-            drawedImage->resize(maxSize,ih*maxSize/iw);
-		else if(ih > iw && ih > maxSize)
-            drawedImage->resize(iw*maxSize/ih,maxSize);
-	}else{
-        drawedImage = targetImage;
-	}
-}
-
 
 void ofxBKImage::setSize(float _width, float _height, bool notify)
 {
@@ -114,7 +44,7 @@ void ofxBKImage::setSize(float _width, float _height, bool notify)
 
 void ofxBKImage::updateImagePosition()
 {
-	if(drawedImage == NULL) return;
+	if(drawedImage == nullptr) return;
 	float tx = 0;
 	float ty = 0;
 	float tw = drawedImage->width;
@@ -163,14 +93,100 @@ void ofxBKImage::updateImagePosition()
 	imageRect.set(tx, ty, tw, th);
 }
 
+void ofxBKImage::processImageForDrawing()
+{
+    // unallocate previously allocated resized image
+    unallocateDrawImage();
+    if (targetImage == nullptr)
+        return;
+
+    float iw = targetImage->width;
+    float ih = targetImage->height;
+
+    if((maxSize > 0) && ((iw > maxSize) || (ih > maxSize)))
+    {
+        isResizedForDraw = true;
+        printf("cloning image for display... ");
+        drawedImage = new ofImage;
+        drawedImage->clone(*targetImage);
+        printf("ok!\n");
+        if(iw >= ih && iw > maxSize)
+            drawedImage->resize(maxSize,ih*maxSize/iw);
+        else if(ih > iw && ih > maxSize)
+            drawedImage->resize(iw*maxSize/ih,maxSize);
+    }else{
+        drawedImage = targetImage;
+        isResizedForDraw = false;
+    }
+
+}
+
+void ofxBKImage::loadImage(string path)
+{
+	unlink();
+    isResizedForDraw = false;
+    imageInternal = new ofImage();
+	imageInternal->loadImage(path);
+	isAllocated = true;
+	targetImage = imageInternal;
+	processImageForDrawing();
+}
+
+void ofxBKImage::setFromPixels(ofPixels p)
+{
+    unloadImage();
+	unlink();
+    imageInternal = new ofImage();
+    isResizedForDraw = false;
+	imageInternal->getPixelsRef() = p;
+    imageInternal->update();
+	processImageForDrawing();
+}
+
+void ofxBKImage::unloadImage()
+{
+    if (imageInternal!=nullptr)
+        delete imageInternal;
+    imageInternal = nullptr;
+
+    unallocateDrawImage();
+    isResizedForDraw = false;
+}
 
 void ofxBKImage::unallocateDrawImage()
 {
     if (isResizedForDraw){
-        if (drawedImage != NULL){
+        if (drawedImage != nullptr){
             delete drawedImage;
         }
     }
-    drawedImage = NULL;
+	isAllocated = false;
+    drawedImage = nullptr;
+}
+
+void ofxBKImage::linkToOfImage(ofImage *_linkedImage)
+{
+	isLinked = true;
+    isResizedForDraw = false;
+	linkedImage = _linkedImage;
+	targetImage = linkedImage;
+	processImageForDrawing();
+	updateImagePosition();
+}
+
+void ofxBKImage::unlink()
+{
+	isLinked = false;
+	linkedImage = nullptr;
+
+	unallocateDrawImage();
+
+    isResizedForDraw = false;
+}
+
+void ofxBKImage::printInfo()
+{
+    ofxBKUIComponent::printInfo();
+    std::cout << "   ofxBKImage:"  << "" << std::endl;
 }
 

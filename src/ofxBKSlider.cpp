@@ -14,15 +14,16 @@ ofxBKSlider::ofxBKSlider(string _label, float _x, float _y, float _width,float _
 
 void ofxBKSlider::init(string _label, float _x, float _y, float _width,float _height)
 {
-	//printf("BT init\n");
-	ofxBKContainer::init(_x, _y, _width, _height);
+//printf("BT init\n");
+ofxBKContainer::init(_x, _y, _width, _height);
 
 	label = _label;
 	labelTF = new ofxBKLabel(_label);
-	labelTF->horizontalAlign = BKUI_TEXTALIGN_CENTER;
-	labelTF->verticalAlign = BKUI_TEXTALIGN_MIDDLE;
+	labelTF->setAlign(ofxBKAlign::CENTER,
+                      ofxBKAlign::MIDDLE);
 	labelTF->setFluidWidth()->setFluidHeight();
 	labelTF->setColor(ofColor::white);
+	labelTF->setAutoMinSize(true);
 	addChild(labelTF);
 
 	labelSuffix = "";
@@ -33,12 +34,12 @@ void ofxBKSlider::init(string _label, float _x, float _y, float _width,float _he
 	mouseDragOffset = 0;
 	isDragging = false;
 
-	bgColor = ofxBKStyle::bgColor;
-	overColor = ofxBKStyle::normalColor;
-	selectedColor = ofxBKStyle::highlightColor;
-	labelColor = ofxBKStyle::normalColor;
-	labelOverColor = ofxBKStyle::lightColor;
-	labelSelectedColor =  ofxBKStyle::normalColor;
+	bgColor            = ofxBKStyle::bgColor;
+	overColor          = ofxBKStyle::normalColor;
+	selectedColor      = ofxBKStyle::highlightColor;
+	labelColor         = ofxBKStyle::normalColor;
+	labelOverColor     = ofxBKStyle::lightColor;
+	labelSelectedColor = ofxBKStyle::normalColor;
 
 	barColor = ofxBKStyle::blue;
 }
@@ -47,9 +48,10 @@ void ofxBKSlider::draw()
 {
 	ofxBKContainer::draw();
 
-	ofSetColor(isOver?overColor:bgColor,enabled?255:100);
+	ofSetColor(isOver  ? overColor : bgColor,
+               (isEnabled()) ? 255 : 100);
 	ofRect(0,0,width,height);
-	ofSetColor(barColor,enabled?255:100);
+	ofSetColor(barColor,(isEnabled())?255:100);
 	float tw = getNormalizedValue()*(width-4);
 	ofRect(2,2,tw,height-4);
 
@@ -107,7 +109,7 @@ void ofxBKSlider::setValue(float _value, bool notify)
 void ofxBKSlider::notifyValueChanged()
 {
 	ofxBKUIEventArgs args;
-	args.eventType = BKEVENT_VALUE_CHANGED;
+	args.eventType = ofxBKUIEventArgs::VALUE_CHANGED;
 	args.target = this;
 	ofNotifyEvent(valueChanged,args);
 
@@ -120,11 +122,22 @@ void ofxBKSlider::setMinMaxValues(float _min, float _max)
 	setValue((maxValue+minValue)/2);
 }
 
+void ofxBKSlider::setDrawValue(bool _drawValue)
+{
+    drawValue = _drawValue;
+    updateLabelTF();
+}
+
+
 void ofxBKSlider::updateLabelTF()
 {
-	char text[256];
-	sprintf(text, "%s : %.2f %s",label.c_str(),value,labelSuffix.c_str());
-	labelTF->setText(string(text));
+    if (drawValue) {
+        char text[256];
+        sprintf(text, "%s : %.2f %s",label.c_str(),value,labelSuffix.c_str());
+        labelTF->setText(string(text));
+    } else {
+        labelTF->setText("");
+    }
 }
 
 
@@ -137,11 +150,11 @@ void ofxBKSlider::mousePressed(ofMouseEventArgs &e)
 	ofHideCursor();
 
 	#ifdef _WIN32
-	LPPOINT pt = LPPOINT();
-	int x = ofGetWindowPositionX()+getGlobalBounds().x +value*width;
-	int y = ofGetWindowPositionY()+getGlobalBounds().y+getMousePosition().y;
-	SetCursorPos(x,y);
-	mouseDragOffset = 0;
+        LPPOINT pt = LPPOINT();
+        int x = ofGetWindowPositionX()+getGlobalBounds().x +value*width;
+        int y = ofGetWindowPositionY()+getGlobalBounds().y+getMousePosition().y;
+        SetCursorPos(x,y);
+        mouseDragOffset = 0;
 	#endif
 
 	isDragging = true;
@@ -168,4 +181,12 @@ void ofxBKSlider::mouseReleasedOutside(ofMouseEventArgs &e)
 float ofxBKSlider::getValueForPosition(float pos)
 {
 	return pos/width;
+}
+
+
+void ofxBKSlider::printInfo()
+{
+    ofxBKContainer::printInfo();
+    std::cout << "   ofxBKSlider: value1(" << value << ")" <<
+                                 " label:" <<label+labelSuffix << std::endl;
 }

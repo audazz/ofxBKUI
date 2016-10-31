@@ -1,14 +1,14 @@
-#pragma once
 #include "ofxBKButton.h"
 #include "ofxBKUIEventArgs.h"
 #include "ofxBKStyle.h"
+#include <algorithm>
 
 ofxBKButton::ofxBKButton()
 {
 }
 
 ofxBKButton::ofxBKButton(string _label, float _x, float _y, float _width,float _height)
-{	
+{
 	init(_label, _x, _y, _width,_height);
 }
 
@@ -17,25 +17,35 @@ void ofxBKButton::init(string _label, float _x, float _y, float _width,float _he
 	ofxBKContainer::init(_x, _y, _width, _height);
 
 	label = new ofxBKLabel(_label,0,0,_width,_height);
-	if(label->autoSize) setSize(label->textBoundingBox.getWidth()+50,label->textBoundingBox.getHeight()+10);
-
-	label->setAlign(BKUI_TEXTALIGN_CENTER,BKUI_TEXTALIGN_MIDDLE);
-	label->setFluidWidth()->setFluidHeight();
+	if(label->autoSize) {
+        if (_width==0)
+            _width = label->width + 50;
+        if (_height==0)
+            _height = label->height + 10;
+        setSize(_width,_height);
+    }
 	addChild(label);
-	
-	isToggle = false;
-	isSelected = false;
-	isPressed = false;
+	label->setAlign(ofxBKAlign::CENTER,
+                    ofxBKAlign::MIDDLE);
+	label->setFluidWidth()->setFluidHeight();
+	label->setAutoMinSize(true);
 
-	bgColor = ofxBKStyle::bgColor;
+	isToggle   = false;
+	isSelected = false;
+	isPressed  = false;
+
+	bgColor = ofxBKStyle::bgColor+10;
 	overColor = ofxBKStyle::normalColor;
 	pressedColor = ofxBKStyle::semiLightColor;
 	selectedColor = ofxBKStyle::highlightColor;
 	labelColor = ofxBKStyle::lightColor;
 	labelOverColor = ofxBKStyle::lightColor;
 	labelSelectedColor =  ofxBKStyle::darkColor;
+	selectAreaStart.set(0,0);
 
 	transparentBG = true;
+
+	printResizeError = false;
 }
 
 
@@ -45,21 +55,31 @@ void ofxBKButton::draw()
 
 	ofColor targetColor;
 	if(isPressed && isOver) targetColor.set(pressedColor);
-	else if(isSelected) targetColor.set(selectedColor);
-	else targetColor.set(bgColor);
+	else if(isSelected)     targetColor.set(selectedColor);
+	else                    targetColor.set(bgColor);
 
-	if(isOver) targetColor.set(min(targetColor.r+30,255),min(targetColor.g+30,255),min(targetColor.b+30,255));
+	if(isOver){
+        targetColor.set(min(targetColor.r + 30, 255),
+                        min(targetColor.g + 30, 255),
+                        min(targetColor.b + 30, 255));
+	}
 
-	ofSetColor(targetColor,enabled?255:50);
-	ofRect(0,0,bgWidth,bgHeight);
+	ofSetColor(targetColor,(isEnabled())? 255 : 50);
+	ofRect(selectAreaStart.x,
+           selectAreaStart.y,
+           selectAreaWidth,
+           selectAreaHeight);
 }
 
 
 string ofxBKButton::getLabel()
 {
+if (label != nullptr)
 	return label->text;
-
+else
+    return "";
 }
+
 void ofxBKButton::setLabel(string _label)
 {
 	label->setText(_label);
@@ -67,7 +87,7 @@ void ofxBKButton::setLabel(string _label)
 
 void ofxBKButton::updateLabelColor()
 {
-	label->setColor((isSelected)?labelSelectedColor:(isOver?labelOverColor:labelColor));
+	label->setColor((isSelected)?labelSelectedColor:(isOver ? labelOverColor : labelColor));
 }
 
 //selection handling
@@ -75,7 +95,7 @@ void ofxBKButton::setSelected(bool value, bool notify)
 {
 	isSelected = value;
 	updateLabelColor();
-	
+
 	if(notify) notifySelected();
 }
 
@@ -83,20 +103,21 @@ void ofxBKButton::notifySelected()
 {
 	ofxBKUIEventArgs args;
 
-	args.eventType = isSelected?BKEVENT_SELECTED:BKEVENT_DESELECTED;
+	args.eventType = isSelected ? ofxBKUIEventArgs::SELECTED :
+                                  ofxBKUIEventArgs::DESELECTED;
 	args.target = this;
-	ofNotifyEvent(isSelected?buttonSelected:buttonDeselected,args);
+	ofNotifyEvent(isSelected ? buttonSelected : buttonDeselected , args);
+	ofNotifyEvent(selectionChange,args);
 }
 
 //size
 
 void ofxBKButton::setSize(float _width, float _height, bool notify)
 {
-	ofxBKUIComponent::setSize(_width,_height,notify);
-	bgWidth = width;
-	bgHeight = height;
+	ofxBKContainer::setSize(_width,_height,notify);
+	selectAreaWidth = width;
+	selectAreaHeight = height;
 }
-
 
 //mouse interaction
 
@@ -107,15 +128,14 @@ void ofxBKButton::mouseOut()
 
 void ofxBKButton::mousePressed(ofMouseEventArgs& eventArgs)
 {
-	
-	ofxBKContainer::mousePressed(eventArgs);	
+	ofxBKContainer::mousePressed(eventArgs);
 }
 
 void ofxBKButton::mouseReleased(ofMouseEventArgs& eventArgs)
 {
 	ofxBKContainer::mouseReleased(eventArgs);
 
-	if(!isToggle) 
+	if(!isToggle)
 	{
 		setSelected(true,true);
 		setSelected(false,true);
@@ -124,12 +144,23 @@ void ofxBKButton::mouseReleased(ofMouseEventArgs& eventArgs)
 		setSelected(!isSelected);
 	}
 
-	
+
 }
 
 void ofxBKButton::mouseReleasedOutside(ofMouseEventArgs& eventArgs)
 {
 	ofxBKContainer::mouseReleasedOutside(eventArgs);
 	//printf("mouse released outside uiComponent\n");
-	if(!isToggle) isSelected = false;	
+	if(!isToggle) isSelected = false;
 }
+
+
+
+void ofxBKButton::printInfo()
+{
+    ofxBKContainer::printInfo();
+    std::cout << "   ofxBKButton:" << getLabel()<< "" << std::endl;
+}
+
+
+

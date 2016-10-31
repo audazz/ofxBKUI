@@ -1,4 +1,3 @@
-#pragma once
 #include "ofxBKDoubleSlider.h"
 #include "ofxBKUIEventArgs.h"
 
@@ -8,8 +7,8 @@ ofxBKDoubleSlider::ofxBKDoubleSlider()
 }
 
 ofxBKDoubleSlider::ofxBKDoubleSlider(string _label, float _x, float _y, float _width,float _height)
-{	
-	init(_label, _x, _y, _width,_height); 
+{
+	init(_label, _x, _y, _width,_height);
 	setValue2(.75);
 	setValue(.25);
 }
@@ -23,9 +22,9 @@ void ofxBKDoubleSlider::init(string _label, float _x, float _y, float _width,flo
 
 void ofxBKDoubleSlider::draw()
 {
-	ofSetColor(isOver?overColor:bgColor,enabled?255:100);
+	ofSetColor(isOver?overColor:bgColor,(isEnabled())?255:100);
 	ofRect(0,0,width,height);
-	ofSetColor(barColor,enabled?255:100);
+	ofSetColor(barColor,(isEnabled())?255:100);
 
 	float tx1 = getNormalizedValue(value)*(width-4);
 	float tx2 = getNormalizedValue(value2)*(width-4);
@@ -52,7 +51,7 @@ void ofxBKDoubleSlider::setValue2(float _value, bool notify)
 	_value = min(max(_value,minValue),maxValue);
 
 	if(value2 == _value) return;
-	value2 = _value;	
+	value2 = _value;
 	updateLabelTF();
 	if(notify) notifyValueChanged();
 }
@@ -77,9 +76,15 @@ ofVec2f ofxBKDoubleSlider::getNormalizedValues()
 
 void ofxBKDoubleSlider::updateLabelTF()
 {
-	char text[256];
-	sprintf(text, "%s : %.2f / %.2f",label.c_str(),value, value2);
-	labelTF->setText(string(text));	
+
+    if (drawValue) {
+        char text[256];
+        sprintf(text, "%s : %.2f / %.2f",label.c_str(),value, value2);
+        labelTF->setText(string(text));
+    } else {
+        labelTF->setText("");
+    }
+
 }
 
 
@@ -91,7 +96,7 @@ void ofxBKDoubleSlider::mousePressed(ofMouseEventArgs &e)
 	ofHideCursor();
 
 	#ifdef _WIN32
-	
+
 	LPPOINT pt = LPPOINT();
 	int x = ofGetWindowPositionX()+getGlobalBounds().x + (currentDraggingValue == 1?value:value2)*width;
 	int y = ofGetWindowPositionY()+getGlobalBounds().y+getMousePosition().y;
@@ -107,7 +112,7 @@ void ofxBKDoubleSlider::mouseDragged(ofMouseEventArgs &e)
 	float targetVal = getValueForPosition(getMousePosition().x)-mouseDragOffset;
 	if(currentDraggingValue == 1) setValue(targetVal);
 	else if(currentDraggingValue == 2) setValue2(targetVal);
-	
+
 }
 
 int ofxBKDoubleSlider::getNearestValueIndex(float _value)
@@ -115,4 +120,12 @@ int ofxBKDoubleSlider::getNearestValueIndex(float _value)
 	if(abs(_value-value) < abs(_value-value2)) return 1;
 	return 2;
 }
+
+void ofxBKDoubleSlider::printInfo()
+{
+    ofxBKSlider::printInfo();
+    std::cout << "   ofxBKDoubleSlider: value2(" << value2 << ")" << std::endl;
+}
+
+
 

@@ -5,6 +5,7 @@ class ofxBKZoomImage : public ofxBKImage
 {
 public:
 	ofxBKZoomImage(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
+    virtual ~ofxBKZoomImage() {/*std::cout << "!ofxBKZoomImage!" << this <<"!";*/};
 
 	ofRectangle zoomRect;
 	ofVec2f zoomAnchor;
@@ -17,7 +18,7 @@ public:
 	ofColor zoomBckColor;
 	bool zoomRecConstSize;
 
-
+    virtual void printInfo();
 
 protected:
 	virtual void init(float _x = 0, float _y = 0, float _width = 100, float _height = 100);
