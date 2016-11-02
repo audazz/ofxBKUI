@@ -3,10 +3,10 @@
 void ofxBKStyle::init()
 {
 	printf("Init Style\n");
-	normalFont.loadFont("Yanone.ttf", 12);
-	titleFont.loadFont("Yanone.ttf", 16);
-	smallFont.loadFont("Yanone.ttf", 10);
-	bigFont.loadFont("Yanone.ttf", 32);
+    normalFont.load("Yanone.ttf", 12);
+    titleFont.load( "Yanone.ttf", 16);
+    smallFont.load( "Yanone.ttf", 10);
+    bigFont.load("Yanone.ttf", 32);
 }
 
 

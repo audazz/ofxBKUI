@@ -1,4 +1,3 @@
-#pragma once
 #include "ofxBKSlider.h"
 #include "ofxBKUIEventArgs.h"
 #include "ofxBKStyle.h"
@@ -50,16 +49,16 @@ void ofxBKSlider::draw()
 
 	ofSetColor(isOver  ? overColor : bgColor,
                (isEnabled()) ? 255 : 100);
-	ofRect(0,0,width,height);
+    ofDrawRectangle(0,0,width,height);
 	ofSetColor(barColor,(isEnabled())?255:100);
 	float tw = getNormalizedValue()*(width-4);
-	ofRect(2,2,tw,height-4);
+    ofDrawRectangle(2,2,tw,height-4);
 
 	if(isDragging)
 	{
 		ofSetLineWidth(3);
 		ofSetColor(ofxBKStyle::red);
-		ofLine(tw+2,2,tw+2,height-2);
+        ofDrawLine(tw+2,2,tw+2,height-2);
 	}
 }
 /*

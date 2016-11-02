@@ -100,15 +100,15 @@ void ofxBKUiDataDraw::setUpFBO()
     if (fbo == nullptr)
         fbo = ofFboPtr(new ofFbo());
 
-	ofFbo::Settings settings;
-	settings.useDepth = true;
-	settings.useStencil = false;
+    ofFbo::Settings settings;
+    settings.useDepth = true;
+    settings.useStencil = false;
     settings.depthStencilAsTexture = false;
-	settings.width  = 1000;
-	settings.height = 1000;
+    settings.width  = 1000;
+    settings.height = 1000;
 
-	fbo->allocate(settings);
-	bkFbo->linkToOfFbo(fbo.get());
+    fbo->allocate(settings);
+    bkFbo->linkToOfFbo(fbo.get());
 }
 
 void ofxBKUiDataDraw::setUpScatter()
@@ -144,10 +144,10 @@ void ofxBKUiDataDraw::setUpScatter()
     }
     std::cout << "range:(afteragain)" << range<< std::endl;
     range.calculateCenter();
-	bkFbo->lockCameraTo(range.center);
+    bkFbo->lockCameraTo(range.center);
     bkFbo->setRotationAxes(ofxBKFbo::Z_ON_TOP);
 
-	CameraAutoFOV autoView(bkFbo,range,10,0.8);
+    CameraAutoFOV autoView(bkFbo,range,10,0.8);
     pointDiameter = autoView.getPointSize() * 1.2;
 
     // prepare axis
@@ -166,12 +166,12 @@ void ofxBKUiDataDraw::setUpScatter()
 
     if (dataPointPicking != nullptr)
         dataPointPicking.reset();
-	dataPointPicking = ptPickingoPtr( new ptPicking(pointsDisplayed,bkFbo));
-	dataPointPicking->setPointShape(CPMScatterPoint::SPHERE);
-	dataPointPicking->setDiameter(pointDiameter);
-	dataPointPicking->setTolerance(pointPickingTolerance);
-	dataPointPicking->setDrawMouse(true);
-	isInitialized = true;
+    dataPointPicking = ptPickingoPtr( new ptPicking(pointsDisplayed,bkFbo));
+    dataPointPicking->setPointShape(CPMScatterPoint::SPHERE);
+    dataPointPicking->setDiameter(pointDiameter);
+    dataPointPicking->setTolerance(pointPickingTolerance);
+    dataPointPicking->setDrawMouse(true);
+    isInitialized = true;
 
     if (fbo != nullptr && bkFbo != nullptr)
         updateFbo();
@@ -222,7 +222,7 @@ void ofxBKUiDataDraw::drawPoints()
             else
                 ofSetColor(pointsDisplayed[i].color,200);
 
-            ofLine(p, gpCenter[pointsDisplayed[i].groupID]);
+            ofDrawLine(p, gpCenter[pointsDisplayed[i].groupID]);
         }
 
         if(toggleMode)
@@ -293,17 +293,17 @@ void ofxBKUiDataDraw::findSelected()
 
 void ofxBKUiDataDraw::notifyPointSelected()
 {
-	ofxBKUIEventArgs args;
-	args.eventType = ofxBKUIEventArgs::SELECTED;
-	args.target = this;
-	ofNotifyEvent(pointSelected,args);
+    ofxBKUIEventArgs args;
+    args.eventType = ofxBKUIEventArgs::SELECTED;
+    args.target = this;
+    ofNotifyEvent(pointSelected,args);
 }
 
 void ofxBKUiDataDraw::notifyPointClicked()
 {
-	ofxBKUIEventArgs args;
-	args.eventType = ofxBKUIEventArgs::CLICKED;
-	args.target = this;
-	ofNotifyEvent(pointClicked,args);
+    ofxBKUIEventArgs args;
+    args.eventType = ofxBKUIEventArgs::CLICKED;
+    args.target = this;
+    ofNotifyEvent(pointClicked,args);
 }
 

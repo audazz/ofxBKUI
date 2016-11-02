@@ -19,8 +19,8 @@ public:
 	static ofColor orange;
 	static ofColor yellow;
 
-	static ofxBKTTFplus normalFont;
-	static ofxBKTTFplus titleFont;
-	static ofxBKTTFplus smallFont;
-	static ofxBKTTFplus bigFont;
+    static ofxBKTTFplus normalFont;
+    static ofxBKTTFplus titleFont;
+    static ofxBKTTFplus smallFont;
+    static ofxBKTTFplus bigFont;
 };

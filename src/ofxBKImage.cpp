@@ -29,7 +29,7 @@ void ofxBKImage::draw()
 {
 	ofxBKUIComponent::draw();
 	ofSetColor(0,50);
-	ofRect(0,0,width,height);
+    ofDrawRectangle(0,0,width,height);
 	ofSetColor(255);
 
 	if(drawedImage != nullptr)
@@ -47,11 +47,11 @@ void ofxBKImage::updateImagePosition()
 	if(drawedImage == nullptr) return;
 	float tx = 0;
 	float ty = 0;
-	float tw = drawedImage->width;
-	float th = drawedImage->height;
+    float tw = drawedImage->getWidth();
+    float th = drawedImage->getHeight();
 
 	float ratio = width/height;
-	float imageRatio = drawedImage->width*1.0/drawedImage->height;
+    float imageRatio = drawedImage->getWidth()*1.0/drawedImage->getHeight();
 
 	switch(fitMode)
 	{
@@ -100,8 +100,8 @@ void ofxBKImage::processImageForDrawing()
     if (targetImage == nullptr)
         return;
 
-    float iw = targetImage->width;
-    float ih = targetImage->height;
+    float iw = targetImage->getWidth();
+    float ih = targetImage->getHeight();
 
     if((maxSize > 0) && ((iw > maxSize) || (ih > maxSize)))
     {
@@ -111,9 +111,9 @@ void ofxBKImage::processImageForDrawing()
         drawedImage->clone(*targetImage);
         printf("ok!\n");
         if(iw >= ih && iw > maxSize)
-            drawedImage->resize(maxSize,ih*maxSize/iw);
+            drawedImage->resize(maxSize , ih*maxSize/iw);
         else if(ih > iw && ih > maxSize)
-            drawedImage->resize(iw*maxSize/ih,maxSize);
+            drawedImage->resize(iw*maxSize/ih , maxSize);
     }else{
         drawedImage = targetImage;
         isResizedForDraw = false;
@@ -126,7 +126,7 @@ void ofxBKImage::loadImage(string path)
 	unlink();
     isResizedForDraw = false;
     imageInternal = new ofImage();
-	imageInternal->loadImage(path);
+    imageInternal->load(path);
 	isAllocated = true;
 	targetImage = imageInternal;
 	processImageForDrawing();
@@ -138,7 +138,7 @@ void ofxBKImage::setFromPixels(ofPixels p)
 	unlink();
     imageInternal = new ofImage();
     isResizedForDraw = false;
-	imageInternal->getPixelsRef() = p;
+    imageInternal->getPixels() = p;
     imageInternal->update();
 	processImageForDrawing();
 }

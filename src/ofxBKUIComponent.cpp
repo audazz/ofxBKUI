@@ -59,11 +59,11 @@ void ofxBKUIComponent::draw()
 	{
 		ofPushStyle();
 		ofSetColor(ofColor::red,100);
-		ofLine(-10,   0, 10,  0);
-		ofLine(  0, -10,  0, 10);
+        ofDrawLine(-10,   0, 10,  0);
+        ofDrawLine(  0, -10,  0, 10);
 		ofSetColor(ofColor::purple,100);
 		ofNoFill();
-		ofRect(0,0,width,height);
+        ofDrawRectangle(0,0,width,height);
 
 		ofPopStyle();
 	}

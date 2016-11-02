@@ -49,7 +49,7 @@ void ofxBKFbo::draw()
 
 	ofxBKUIComponent::draw();
 	ofSetColor(0,50);
-	ofRect(0,0,width,height);
+    ofDrawRectangle(0,0,width,height);
 	ofSetColor(255);
 
 	if(targetFbo != nullptr) targetFbo->draw(fboRect);

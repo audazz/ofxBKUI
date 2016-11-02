@@ -65,7 +65,7 @@ void ofxBKButton::draw()
 	}
 
 	ofSetColor(targetColor,(isEnabled())? 255 : 50);
-	ofRect(selectAreaStart.x,
+    ofDrawRectangle(selectAreaStart.x,
            selectAreaStart.y,
            selectAreaWidth,
            selectAreaHeight);

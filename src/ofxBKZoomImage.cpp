@@ -35,8 +35,8 @@ void ofxBKZoomImage::draw()
         else if (ofGetMousePressed(2))
             zoomLevel = 2;
 
-        int wCropRect = (int)(std::min( zoomRectMaxSize[0], targetImage->width  ) /zoomLevel);
-        int hCropRect = (int)(std::min( zoomRectMaxSize[1], targetImage->height ) /zoomLevel);
+        int wCropRect = (int)(std::min( zoomRectMaxSize[0], (int)targetImage->getWidth()  ) /zoomLevel);
+        int hCropRect = (int)(std::min( zoomRectMaxSize[1], (int)targetImage->getHeight() ) /zoomLevel);
 
         // smooth mouse position
         ofVec2f pointerPos = getSmoothMousePosition();
@@ -44,7 +44,7 @@ void ofxBKZoomImage::draw()
 		ofVec2f pointerPosInImage;
 
 		ofVec2f deltaIm(wCropRect, hCropRect);
-		ofVec2f scaleIm(targetImage->width, targetImage->height);
+        ofVec2f scaleIm(targetImage->getWidth(), targetImage->getHeight());
 
 		// position relative to image coordinate (in percent)
 		ofVec2f deltaDraw(imageRect.x, imageRect.y);
@@ -97,7 +97,7 @@ void ofxBKZoomImage::draw()
 		ofPushStyle();
             ofSetColor(zoomBckColor);
             ofFill();
-            ofRect(destRectFull);
+            ofDrawRectangle(destRectFull);
         ofPopStyle();
 
         // draw image
@@ -117,7 +117,7 @@ void ofxBKZoomImage::draw()
             ofSetColor(ofxBKStyle::normalColor);
             ofNoFill();
             ofSetLineWidth(4);
-            ofRect(destRectFull);
+            ofDrawRectangle(destRectFull);
 		ofPopStyle();
 
 

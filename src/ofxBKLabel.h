@@ -28,7 +28,7 @@ public :
 
 	ofRectangle textBoundingBox;
 
-	ofxBKTTFplus * font;
+    ofxBKTTFplus * font;
 	std::string text;
 
 	ofColor textColor;

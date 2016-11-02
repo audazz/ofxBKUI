@@ -58,8 +58,8 @@ void ofxBKLabel::debugDraw()
 
 		ofSetColor(ofxBKStyle::red);
 		ofNoFill();
-		ofLine(0,0,textOffset.x,textOffset.y); // TODO: Probably wrong
-		ofRect(textBoundingBox+getTextStartPosition());// TODO: Probably wrong
+        ofDrawLine(0,0,textOffset.x,textOffset.y); // TODO: Probably wrong
+        ofDrawRectangle(textBoundingBox+getTextStartPosition());// TODO: Probably wrong
         //ofRect(textBoundingBoxReal);
 		ofDrawSphere(getTextStartPosition(),2);
 

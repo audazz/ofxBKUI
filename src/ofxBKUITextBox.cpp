@@ -17,7 +17,7 @@ void ofxBKUITextBox::textDraw()
 	ofPushStyle();
         ofSetColor(textColor);
         auto pos(getTextStartPosition());
-        font->drawString(text, pos.x+startPosition.x, pos.y+startPosition.y, ofRectangle(0,0,width,height));//TODO: boundary check in draw string
+        font->drawStringInRect(text, pos.x+startPosition.x, pos.y+startPosition.y, ofRectangle(0,0,width,height));//TODO: boundary check in draw string
     ofPopStyle();
 }
 
@@ -29,8 +29,8 @@ void ofxBKUITextBox::debugDraw()
 
 		ofSetColor(ofxBKStyle::red);
 		ofNoFill();
-		ofLine(0,0,textOffset.x,textOffset.y);
-		ofRect(textBoundingBox+getTextStartPosition()+startPosition);
+        ofDrawLine(0,0,textOffset.x,textOffset.y);
+        ofDrawRectangle(textBoundingBox+getTextStartPosition()+startPosition);
         //ofRect(textBoundingBoxReal);
 		ofDrawSphere(getTextStartPosition()+startPosition,2);
 

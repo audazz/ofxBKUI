@@ -23,19 +23,19 @@ void ofxBKDoubleSlider::init(string _label, float _x, float _y, float _width,flo
 void ofxBKDoubleSlider::draw()
 {
 	ofSetColor(isOver?overColor:bgColor,(isEnabled())?255:100);
-	ofRect(0,0,width,height);
+    ofDrawRectangle(0,0,width,height);
 	ofSetColor(barColor,(isEnabled())?255:100);
 
 	float tx1 = getNormalizedValue(value)*(width-4);
 	float tx2 = getNormalizedValue(value2)*(width-4);
-	ofRect(2+tx1,2,tx2-tx1,height-4);
+    ofDrawRectangle(2+tx1,2,tx2-tx1,height-4);
 
 	if(isDragging)
 	{
 		float tx = currentDraggingValue == 1?tx1:tx2;
 		ofSetLineWidth(3);
 		ofSetColor(ofColor(200,10,0));
-		ofLine(tx+2,2,tx+2,height-2);
+        ofDrawLine(tx+2,2,tx+2,height-2);
 	}
 }
 

@@ -70,14 +70,14 @@ void ofxBKContainer::draw()
 	if(!transparentBG)
 	{
 		ofSetColor(bgColor);
-		ofRect(0,0,width,height);
+        ofDrawRectangle(0,0,width,height);
 	}
 
 	if(drawDebug || ofxBKUI::drawDebug)
 	{
 		ofSetColor(ofColor::orange,100);
 		ofNoFill();
-		ofRect(paddingLeft,paddingTop,getInnerWidth(),getInnerHeight());
+        ofDrawRectangle(paddingLeft,paddingTop,getInnerWidth(),getInnerHeight());
 	}
 
 	ofPopStyle();

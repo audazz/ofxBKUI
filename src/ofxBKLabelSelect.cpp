@@ -62,7 +62,7 @@ void ofxBKLabelSelect::draw()
     ofPushStyle();
         ofSetColor(selectionColor);
         ofFill();
-        for (auto rec : selectedArea) ofRect(rec);//TODO:check boundary
+        for (auto rec : selectedArea) ofDrawRectangle(rec);//TODO:check boundary
     ofPopStyle();
 
     textDraw();
