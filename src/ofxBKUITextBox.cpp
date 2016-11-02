@@ -17,7 +17,9 @@ void ofxBKUITextBox::textDraw()
 	ofPushStyle();
         ofSetColor(textColor);
         auto pos(getTextStartPosition());
-        font->drawStringInRect(text, pos.x+startPosition.x, pos.y+startPosition.y, ofRectangle(0,0,width,height));//TODO: boundary check in draw string
+        // devrait n'afficher qu'un crop du texte, mais ne marche plus...
+//        font->drawStringInRect(text, pos.x+startPosition.x, pos.y+startPosition.y, ofRectangle(0,0,width,height));//TODO: boundary check in draw string
+        font->drawString(text, pos.x+startPosition.x, pos.y+startPosition.y);//TODO: boundary check in draw string
     ofPopStyle();
 }
 
