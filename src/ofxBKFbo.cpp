@@ -86,10 +86,10 @@ void ofxBKFbo::setFOV(float fov)
     cameraFov = fov;
 }
 
-void ofxBKFbo::setClipping(float near, float far)
+void ofxBKFbo::setClipping(float _near, float _far)
 {
-    nearClip = near;
-    farClip = far;
+    nearClip = _near;
+    farClip = _far;
 }
 
 

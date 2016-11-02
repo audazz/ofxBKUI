@@ -26,7 +26,8 @@ void ofxBKPanel::init(string _title,  float _x, float _y, float _width, float _h
 	draggable = false;
 	miniModeEnabled = false;
 	isInMiniMode = false;
-
+	transparentBG = false;
+	bgColor = ofColor(25);
 	//title->setPosition(0,-paddingTop);
 }
 
